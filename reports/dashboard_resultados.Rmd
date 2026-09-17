@@ -1,0 +1,162 @@
+---
+title: "Influencia360 · Resultados bayesianos"
+output:
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: scroll
+    theme: flatly
+    self_contained: true
+---
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(plotly)
+library(DT)
+library(visNetwork)
+library(flexdashboard)
+influencers <- read_csv("data/processed/ranking_influenciadores.csv", show_col_types = FALSE)
+seguidores <- read_csv("data/processed/ranking_seguidores.csv", show_col_types = FALSE)
+perfiles <- read_csv("data/processed/perfiles_analiticos.csv", show_col_types = FALSE)
+arcos <- read_csv("data/processed/arcos_red_bayesiana.csv", show_col_types = FALSE)
+metricas <- read_csv("data/processed/metricas_modelo.csv", show_col_types = FALSE)
+escenarios <- read_csv("data/processed/escenarios_inferencia.csv", show_col_types = FALSE)
+```
+
+Resumen
+=======================================================================
+
+Row {data-height=150}
+-----------------------------------------------------------------------
+
+### Influenciadores de alta probabilidad
+
+```{r}
+valueBox(sum(influencers$prob_influencia_alta >= .70), icon = "fa-bullhorn", color = "danger")
+```
+
+### Seguidores de alta probabilidad
+
+```{r}
+valueBox(sum(seguidores$prob_seguidor_alta >= .70), icon = "fa-star", color = "success")
+```
+
+### Exactitud influencia
+
+```{r}
+valueBox(scales::percent(metricas$exactitud[metricas$objetivo == "Potencial de influencia"], accuracy = .1),
+         icon = "fa-check-circle", color = "primary")
+```
+
+### Arcos aprendidos
+
+```{r}
+valueBox(nrow(arcos), icon = "fa-project-diagram", color = "info")
+```
+
+Row
+-----------------------------------------------------------------------
+
+### Probabilidad y score de influencia
+
+```{r}
+p <- ggplot(influencers, aes(score_influencia, prob_influencia_alta, color = nicho,
+                             size = seguidores,
+                             text = paste0("@", usuario, "<br>", pais,
+                                           "<br>P alta: ", scales::percent(prob_influencia_alta)))) +
+  geom_point(alpha = .65) + theme_minimal() +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "Score de negocio", y = "Probabilidad bayesiana", color = "Nicho", size = "Seguidores")
+ggplotly(p, tooltip = "text")
+```
+
+### Inferencia por escenarios
+
+```{r}
+p <- ggplot(escenarios, aes(reorder(escenario, prob_influencia_alta),
+                            prob_influencia_alta,
+                            text = scales::percent(prob_influencia_alta, accuracy = .1))) +
+  geom_col(fill = "#2C7FB8") + coord_flip() + theme_minimal() +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = NULL, y = "P(influencia alta | evidencia)")
+ggplotly(p, tooltip = "text")
+```
+
+Red bayesiana
+=======================================================================
+
+Row
+-----------------------------------------------------------------------
+
+### Dependencias condicionales aprendidas
+
+```{r}
+nombres <- unique(c(arcos$origen, arcos$destino))
+nodos <- data.frame(
+  id = nombres,
+  label = gsub("_", "\n", nombres),
+  group = ifelse(nombres %in% c("potencial_influencia", "calidad_seguidor"), "Objetivo", "Evidencia"),
+  title = nombres
+)
+enlaces <- data.frame(from = arcos$origen, to = arcos$destino, arrows = "to",
+                      title = paste("p-valor:", signif(arcos$p_value, 3)))
+visNetwork(nodos, enlaces, height = "620px") %>%
+  visGroups(groupname = "Objetivo", color = "#E74C3C") %>%
+  visGroups(groupname = "Evidencia", color = "#3498DB") %>%
+  visHierarchicalLayout(direction = "LR", sortMethod = "directed") %>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)
+```
+
+Influenciadores
+=======================================================================
+
+Row
+-----------------------------------------------------------------------
+
+### Ranking probabilístico de influenciadores
+
+```{r}
+influencers %>%
+  mutate(prob_influencia_alta = scales::percent(prob_influencia_alta, accuracy = .1),
+         tasa_engagement = round(tasa_engagement, 2),
+         score_influencia = round(score_influencia, 1)) %>%
+  datatable(rownames = FALSE, filter = "top",
+            options = list(pageLength = 15, scrollX = TRUE))
+```
+
+Seguidores
+=======================================================================
+
+Row
+-----------------------------------------------------------------------
+
+### Ranking probabilístico de seguidores
+
+```{r}
+seguidores %>%
+  mutate(prob_seguidor_alta = scales::percent(prob_seguidor_alta, accuracy = .1),
+         reciprocidad = scales::percent(reciprocidad, accuracy = .1),
+         score_seguidor = round(score_seguidor, 1)) %>%
+  datatable(rownames = FALSE, filter = "top",
+            options = list(pageLength = 15, scrollX = TRUE))
+```
+
+Evaluación
+=======================================================================
+
+Row
+-----------------------------------------------------------------------
+
+### Rendimiento fuera de muestra
+
+```{r}
+metricas %>%
+  mutate(exactitud = scales::percent(exactitud, accuracy = .1)) %>%
+  datatable(rownames = FALSE, options = list(dom = "t", pageLength = 5))
+```
+
+### Lectura correcta
+
+La exactitud se calculó sobre el 20% de perfiles que no participó en el ajuste de evaluación. Los escenarios muestran asociaciones condicionales, no efectos causales. Use el ranking como filtro de priorización y acompañe toda decisión real con revisión humana, control de sesgos y evidencia temporal.
+

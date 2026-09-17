@@ -1,0 +1,3 @@
+objetivo,exactitud,n_entrenamiento,n_prueba,metodo
+Potencial de influencia,0.8076923076923077,520,130,Hill climbing + BDe; parámetros Bayes/Dirichlet
+Calidad como seguidor,0.8076923076923077,520,130,Hill climbing + BDe; parámetros Bayes/Dirichlet

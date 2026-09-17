@@ -1,0 +1,909 @@
+---
+title: "Proyectos BI 2026: Plan de Desarrollo con GitHub, Agentes de IA, Docker y Publicación Web"
+subtitle: "Universo Monetario · Trading Cuantitativo · Arbitraje en Plataformas de Apuestas"
+author: "Curso BI-2 · Unidad 1"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 3
+    number_sections: true
+    theme: flatly
+    highlight: tango
+    includes:
+      in_header: mermaid_header.html
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo       = TRUE,
+  message    = FALSE,
+  warning    = FALSE,
+  fig.align  = "center",
+  fig.width  = 10,
+  fig.height = 6
+)
+```
+
+# Introducción
+
+Durante la **Unidad 1** del curso de Business Intelligence se ha decidido avanzar con **tres proyectos aplicados**:
+
+1. **Universo Monetario** — monitoreo y análisis de agregados monetarios, tipos de cambio, inflación y política monetaria.
+2. **Trading Cuantitativo** — diseño, validación y automatización de estrategias de inversión basadas en datos.
+3. **Arbitraje en plataformas de apuestas** — detección sistemática de oportunidades de arbitraje (*surebets*) entre casas de apuestas.
+
+Para el desarrollo se adoptó una **plataforma tecnológica común** que combina:
+
+- **GitHub** como repositorio, espacio de distribución y trabajo colaborativo.
+- **Agentes de inteligencia artificial** (Gemini, Claude, ChatGPT y otros) operados desde la **línea de comandos** en cualquier sistema operativo, orquestados con **`herdr`**.
+- **Docker** para aislar los entornos de trabajo de cada proyecto.
+- Un **sistema de base de datos** (PostgreSQL) como capa de almacenamiento.
+- **Vercel / Netlify** para publicar los resultados desde las primeras indagaciones hasta los modelos finales.
+
+El ecosistema completo se resume así:
+
+```{r diagrama-ecosistema, echo=TRUE, eval=FALSE, class.source="mermaid"}
+graph LR
+  F[Fuentes de datos<br/>APIs · Web scraping · CSV] --> A[Agentes de IA<br/>en herdr / terminal]
+  A --> E[ETL en R / Python]
+  E --> DB[(PostgreSQL<br/>contenedor Docker)]
+  DB --> M[Análisis y modelos<br/>R · RMarkdown]
+  M --> RMD[Reportes · dashboards]
+  RMD --> S[Sitio estático docs/]
+  S --> D[Vercel · Netlify]
+  GH[GitHub<br/>código + CI/CD] -.-> M
+  GH -.-> S
+  D --> P[Resultados públicos del curso]
+```
+
+Este documento cumple tres propósitos:
+
+1. Describir los **pasos generales del proceso BI** que se aplicarán a los tres proyectos.
+2. Describir las **peculiaridades específicas** de cada proyecto.
+3. Definir la **infraestructura y herramientas** del curso: GitHub, agentes de IA en terminal con `herdr`, Docker, bases de datos y publicación web.
+
+# Los tres proyectos en una mirada
+
+| Dimensión | Universo Monetario | Trading Cuantitativo | Arbitraje en Apuestas |
+|---|---|---|---|
+| **Objetivo central** | Monitorear y analizar el sistema monetario (agregados, tipos de cambio, inflación) | Diseñar y validar estrategias de inversión cuantitativas | Detectar y explotar diferencias de cuotas (*surebets*) entre casas |
+| **Fuentes de datos** | Bancos centrales, FMI, FRED, Banco Mundial, criptomonedas | Bolsas, Yahoo Finance, Binance, Alpha Vantage, Polygon | APIs de cuotas (The Odds API, Betfair), web scraping de casas |
+| **Frecuencia típica** | Mensual, trimestral (con series diarias de tipo de cambio) | Diaria / intradía (OHLCV) | Casi en tiempo real (segundos) |
+| **Complejidad principal** | Heterogeneidad de definiciones y revisiones de datos | Sesgos en backtesting y gestión de riesgo | Latencia, términos de servicio y volatilidad de cuotas |
+| **Entregable principal** | Dashboard de agregados + modelo de proyección | Reporte de estrategia con backtest y métricas de riesgo | Detector en tiempo real + alertas + dashboard |
+| **Paquetes R clave** | `fredr`, `imfr`, `wbstats`, `quantmod`, `forecast` | `quantmod`, `TTR`, `PerformanceAnalytics`, `quantstrat` | `httr2`, `rvest`, `jsonlite`, `DT`, `shiny` |
+
+Cada proyecto comparte el **mismo esqueleto metodológico** (sección 3), pero difiere en datos, tiempos y riesgos (secciones 4 a 6).
+
+# Metodología general del proceso BI
+
+Seguimos las **seis etapas del proceso BI** definidas en el diagrama del curso (`Diagrama_BI.md`), enriquecidas con nuestra plataforma tecnológica:
+
+```{r diagrama-bi, echo=TRUE, eval=FALSE, class.source="mermaid"}
+graph LR
+  classDef rec fill:#E8F5E9,stroke:#2E7D32,color:#1B5E20
+  classDef ges fill:#E3F2FD,stroke:#1565C0,color:#0D47A1
+  classDef exp fill:#FFF3E0,stroke:#E65100,color:#BF360C
+  classDef mod fill:#F3E5F5,stroke:#6A1B9A,color:#4A148C
+  classDef pre fill:#FCE4EC,stroke:#C62828,color:#B71C1C
+  classDef aut fill:#E0F7FA,stroke:#006064,color:#004D40
+
+  A[1. Recolección<br/>de datos]:::rec --> B[2. Gestión<br/>ETL + PostgreSQL]:::ges
+  B --> C[3. Exploración<br/>y visualización]:::exp
+  C --> D[4. Modelos<br/>analíticos]:::mod
+  D --> E[5. Presentación<br/>RMarkdown · dashboard]:::pre
+  E --> F[6. Automatización<br/>scheduler + CI/CD]:::aut
+  F -.->|ciclo continuo| A
+```
+
+## Etapa 1 — Recolección de datos
+
+Se obtienen datos desde **fuentes externas** mediante APIs (HTTP/REST, con `httr2` o `jsonlite`) y *web scraping* (`rvest`), así como desde archivos (CSV, Excel, JSON). En esta etapa los **agentes de IA** (operados con `herdr`) aceleran la exploración de documentación de APIs, la escritura de los extractores y su puesta en marcha.
+
+> **Regla del curso:** todo código de recolección queda en el repositorio de GitHub con su README, para garantizar **reproducibilidad** desde el primer día.
+
+## Etapa 2 — Gestión de datos (ETL)
+
+- **Extracción:** descarga inicial (*full load*) y descargas incrementales posteriores.
+- **Transformación:** limpieza, tipado de fechas, estandarización de formatos, deduplicación y enriquecimiento.
+- **Carga:** volcado a **PostgreSQL** (contenedor Docker) en tablas normalizadas y optimizadas por proyecto.
+- **Calidad:** validaciones automáticas (valores nulos, rangos, unicidad de claves) ejecutadas por *checks* del ETL.
+
+## Etapa 3 — Exploración y visualización
+
+- Resúmenes estadísticos, distribuciones, correlaciones y detección de valores atípicos.
+- Visualización con `ggplot2` y gráficos interactivos con `plotly`.
+- Los hallazgos se documentan en **RMarkdown** y se publican desde esta etapa (sección 11).
+
+## Etapa 4 — Modelos analíticos
+
+Se construyen según el tipo de proyecto:
+
+| Tipo de modelo | Ejemplos en el curso |
+|---|---|
+| Descriptivos | Segmentación de series monetarias, análisis de márgenes de cuotas |
+| Predictivos | Proyección de inflación/liquidez, señales de trading, forecasting |
+| Prescriptivos | Sizing de posiciones, distribución óptima de apuestas |
+| Diagnósticos | Detección de anomalías en series y en cuotas |
+
+## Etapa 5 — Presentación
+
+Reportes en **RMarkdown / flexdashboard**, tableros interactivos y narrativa de datos. El HTML generado se publica en la carpeta `docs/` del repositorio y se despliega automáticamente en **Vercel o Netlify**.
+
+## Etapa 6 — Automatización
+
+- Schedulers (cron, GitHub Actions o contenedores `worker`) para actualizar datos y reportes.
+- Alertas automáticas (correo, Telegram) cuando el detector de arbitraje encuentra una oportunidad o cuando un modelo supera/incumple umbrales.
+- Reentrenamiento periódico de modelos y monitoreo de su desempeño en producción.
+
+```{r ejemplo-verificacion, echo=TRUE, eval=TRUE}
+# Ejemplo: verificación rápida del entorno de trabajo desde R
+cat("R versión:", R.version.string, "\n")
+cat("Paquetes disponibles:", c("rmarkdown", "knitr", "flexdashboard", "DBI") %in%
+      rownames(installed.packages()), "\n")
+```
+
+# Proyecto 1: Universo Monetario
+
+## Objetivo y alcance
+
+Analizar el **universo monetario**: el conjunto de activos, pasivos e indicadores que definen la cantidad de dinero en una economía. El proyecto monitorea y modela:
+
+- **Agregados monetarios** (M0, M1, M2, M3) de varios países.
+- **Tipos de cambio** y paridades.
+- **Inflación** (IPC, inflación subyacente) y tasas de interés de referencia.
+- **Base monetaria y multiplicador monetario**.
+- Complementariamente, **activos digitales** (stablecoins, criptomonedas) como parte del nuevo "universo monetario".
+
+## Fuentes de datos principales
+
+| Fuente | Contenido | Acceso |
+|---|---|---|
+| **FRED** (St. Louis Fed) | Miles de series macro para EE. UU. y el mundo | API gratuita (`fredr`) |
+| **IMF** (International Financial Statistics) | Agregados monetarios comparables entre países | API SDMX (`imfr`) |
+| **Bancos centrales** (BCRP, BCCh, Banxico, Fed, BCE) | Series oficiales nacionales | Sitios web y APIs propias |
+| **Banco Mundial** | Indicadores de desarrollo | API (`wbstats`) |
+| **CoinGecko / CoinMarketCap** | Precios y capitalización de cripto | API |
+
+## Peculiaridades del proyecto
+
+1. **Definiciones nacionales distintas.** M1 o M2 no significan lo mismo en todos los países (cada banco central define sus agregados). Es imprescindible documentar cada serie con su **metadato** (definición, fuente, unidad, ajuste estacional).
+2. **Frecuencias y calendarios mixtos.** Series diarias (tipo de cambio), mensuales (M2) y trimestrales (PIB) deben **alinearse temporalmente** (colapsar a frecuencia común o mantener cada una en su propia tabla).
+3. **Revisiones de datos.** Los bancos centrales corrigen y revisan series históricas; las descargas deben llevar **fecha de extracción** (columna `snapshot_at`) para reconstruir versiones anteriores.
+4. **Estacionariedad y estacionalidad.** Los modelos de proyección requieren transformar las series (diferencias, logaritmos) y desestacionalizar.
+5. **Contexto de alta inflación.** En entornos inflacionarios recientes, las tasas de crecimiento interanual y las variaciones mensuales anualizadas son más informativas que los niveles absolutos.
+6. **Cobertura limitada en países emergentes.** Algunas series pueden faltar o tener actualizaciones rezagadas; conviene diseñar el pipeline con **tolerancia a datos faltantes**.
+
+## Herramientas R sugeridas
+
+- `fredr` — descarga de FRED con código de serie (p. ej. `M2SL`, `DFF`).
+- `imfr` — agregados monetarios del FMI por país.
+- `wbstats` — indicadores del Banco Mundial.
+- `quantmod` — tipos de cambio (USD/PEN, USD/CLP, etc.).
+- `zoo` / `xts` — series temporales y alineación de frecuencias.
+- `forecast` / `tseries` — modelos de proyección (ARIMA, ETS).
+- `lubridate` — manejo robusto de fechas.
+
+```{r universo-monetario, echo=TRUE, eval=TRUE}
+# Ejemplo ilustrativo con datos simulados (mismo patrón que FRED/BCRP)
+set.seed(42)
+fechas <- seq(as.Date("2022-01-01"), by = "month", length.out = 36)
+m2     <- 1000 + cumsum(rnorm(36, mean = 18, sd = 9))   # agregado M2 (base simulada)
+ipc    <- 3.5 + 2.2 * sin(seq(0, 4 * pi, length.out = 36)) + rnorm(36, 0, 0.4)  # inflación anual %
+
+datos_monetarios <- data.frame(fecha = fechas, M2 = m2, inflacion = ipc)
+
+plot(fechas, m2, type = "l", col = "steelblue", lwd = 2,
+     main = "Evolución del agregado M2 (datos simulados)",
+     xlab = "Fecha", ylab = "Índice M2")
+```
+
+```{r universo-monetario-descarga, echo=TRUE, eval=FALSE}
+# Ejemplo real (requiere API key de FRED): https://fred.stlouisfed.org
+# library(fredr)
+# fredr_set_key("SU_API_KEY_FRED")
+# m2 <- fredr(series_id = "M2SL", frequency = "m")
+# head(m2)
+```
+
+## Diseño de la base de datos
+
+- **`series`** — metadatos: `id_serie`, `codigo_fuente`, `pais`, `definicion`, `unidad`, `ajuste_estacional`, `frecuencia`.
+- **`valores`** — formato largo: `id_serie`, `fecha`, `valor`, `snapshot_at` (versión de la extracción).
+
+## Entregables esperados
+
+1. Catálogo de series con metadatos (primer entregable publicable).
+2. Dashboard de agregados monetarios y tipos de cambio (flexdashboard).
+3. Informe comparativo de inflación entre países.
+4. Modelo de proyección de liquidez/inflación con evaluación de error (MAE, RMSE).
+
+# Proyecto 2: Trading Cuantitativo
+
+## Objetivo y alcance
+
+Desarrollar **estrategias de inversión basadas en datos** que puedan ser probadas (*backtesting*), evaluadas y eventualmente automatizadas:
+
+- Estrategias de **momentum**, **reversión a la media** y **cruce de medias móviles**.
+- Señales basadas en indicadores técnicos (RSI, MACD, bandas de Bollinger).
+- Modelos de retorno y volatilidad (GARCH, modelos de regresión).
+- Optimización de portafolio (Markowitz) y **gestión de riesgo** (sizing, drawdown, Value at Risk).
+
+## Fuentes de datos principales
+
+| Fuente | Contenido | Acceso |
+|---|---|---|
+| **Yahoo Finance** | OHLCV diario de acciones, ETF, índices, FX | `quantmod::getSymbols` |
+| **Binance / Bybit** | OHLCV y libro de órdenes de cripto (24/7) | API REST/WebSocket |
+| **Alpha Vantage / Polygon** | Datos históricos e intradía | API con key |
+| **FRED** | Tasas de interés, curvas de rendimiento | `fredr` |
+| **Investing / BCRP** | Índices y referencias locales | Scraping |
+
+## Peculiaridades del proyecto
+
+1. **Ajuste por eventos corporativos.** Splits, dividendos y fusiones alteran los precios históricos; el pipeline debe trabajar siempre con precios **ajustados** (`Ad` de Yahoo Finance).
+2. **Sesgos que invalidan backtests:**
+   - *Survivorship bias*: ignorar activos que quebraron o dejaron de cotizar.
+   - *Look-ahead bias*: usar información del futuro (p. ej., valores del cierre en señales intradía).
+   - *Overfitting*: estrategias con muchos parámetros ajustados al pasado que fallan fuera de muestra.
+3. **Costos de transacción.** Comisiones, *spread* y *slippage* deben incluirse en el backtest; una estrategia puede ser rentable en bruto y perdedora en neto.
+4. **Evaluación correcta del modelo.** Separación **temporal** (no aleatoria) entre entrenamiento y prueba, y validación *walk-forward*.
+5. **Métricas de desempeño y riesgo.** Rentabilidad anualizada, Sharpe, Sortino, *maximum drawdown*, VaR y Calmar.
+6. **Cripto 24/7 vs. mercados con horario.** Los calendarios de sesión son distintos; el merge de series debe respetar cada calendario.
+7. **Volumen de datos intradía.** Los datos de alta frecuencia requieren almacenamiento eficiente (particiones por tiempo) y consultas optimizadas.
+
+## Herramientas R sugeridas
+
+- `quantmod` — descarga OHLCV y cálculo de indicadores.
+- `TTR` — indicadores técnicos (RSI, MACD, medias móviles, Bollinger).
+- `PerformanceAnalytics` — métricas de desempeño y riesgo.
+- `quantstrat` / `blotter` — frameworks de backtesting.
+- `rugarch` — modelado de volatilidad (GARCH).
+- `fPortfolio` / `PortfolioAnalytics` — optimización de portafolios.
+- `data.table` — procesamiento eficiente de datos de mercado.
+
+```{r trading-ejemplo, echo=TRUE, eval=TRUE}
+# Ejemplo ilustrativo: señal de cruce de medias móviles (datos simulados)
+set.seed(7)
+n     <- 250
+ret   <- rnorm(n, mean = 0.0005, sd = 0.012)
+precio <- cumprod(1 + ret) * 100
+
+sma_20 <- rep(NA, n)   # media móvil simple de 20 días (base R)
+for (i in 20:n) sma_20[i] <- mean(precio[(i - 19):i])
+
+senal <- rep(NA, n)    # 1 = sobre media móvil, 0 = bajo
+senal[!is.na(sma_20)] <- as.numeric(precio[!is.na(sma_20)] > sma_20[!is.na(sma_20)])
+
+cat("Días con precio sobre la media móvil:", sum(senal, na.rm = TRUE),
+    "de", n - 19, "observaciones con señal\n")
+```
+
+```{r trading-descarga, echo=TRUE, eval=FALSE}
+# Ejemplo real de descarga con quantmod (requiere conexión a internet)
+# library(quantmod)
+# getSymbols("AAPL", src = "yahoo", from = "2020-01-01")
+# head(Cl(AAPL))          # precio de cierre
+# rsi <- RSI(Cl(AAPL), n = 14)
+```
+
+## Diseño de la base de datos
+
+- **`ohlcv`** — `simbolo`, `fecha`, `open`, `high`, `low`, `close`, `volume`, `adj_close`.
+- Índice compuesto sobre `(simbolo, fecha)` y partición por rango de fechas (o extensión TimescaleDB) para datos intradía.
+- **`signals`** — `simbolo`, `fecha`, `estrategia`, `signal_value` para auditoría de backtests.
+
+## Entregables esperados
+
+1. Documento de **diseño de la estrategia** (reglas claras y testables).
+2. **Backtest reproducible** con métricas de desempeño y riesgo.
+3. Dashboard de seguimiento de señales y desempeño.
+4. Informe de **walk-forward analysis** y análisis de sensibilidad a costos.
+
+# Proyecto 3: Arbitraje en plataformas de apuestas
+
+## Objetivo y alcance
+
+Detectar sistemáticamente **oportunidades de arbitraje** (*surebets*): situaciones en las que, combinando cuotas de distintas casas de apuestas para el mismo evento, la suma de las probabilidades implícitas es **menor que 100 %**. En ese caso existe una distribución de apuestas que garantiza beneficio **cualquiera sea el resultado**.
+
+La matemática básica es la siguiente:
+
+```{r arbitraje-matematica, echo=TRUE, eval=TRUE}
+# Cuotas decimales de distintas casas para el mismo evento
+cuotas    <- c(2.10, 3.40, 5.00)     # victoria local, empate, victoria visitante
+probs     <- 1 / cuotas              # probabilidad implícita por cuota
+overround <- sum(probs)              # margen combinado (debe ser < 1 para arbitrar)
+
+cat("Cuotas:", cuotas, "\n")
+cat("Probabilidades implícitas:", round(probs, 4), "\n")
+cat("Suma (overround):", round(overround, 4), "\n")
+
+if (overround < 1) {
+  beneficio <- (1 / overround) - 1                       # rentabilidad garantizada
+  apuesta   <- (1 / cuotas) / sum(1 / cuotas)            # distribución óptima del bankroll
+  cat("¡Arbitraje detectado! Beneficio garantizado:", round(beneficio * 100, 2), "%\n")
+  cat("Distribución óptima del bankroll:", round(apuesta, 4), "\n")
+} else {
+  cat("Sin arbitraje: el margen de las casas impide el beneficio garantizado.\n")
+}
+```
+
+## Fuentes de datos principales
+
+| Fuente | Contenido | Acceso |
+|---|---|---|
+| **The Odds API** | Cuotas agregadas de múltiples casas | API REST (plan free limitado) |
+| **Betfair** | Cuotas de intercambio de apuestas | API oficial |
+| **Casas de apuestas** (bwin, Bet365, etc.) | Cuotas por evento | Web scraping (revisar Términos de Servicio) |
+| **APIs locales** (Apuesta Total, Inkabet, etc.) | Cuotas en monedas locales | API / scraping |
+
+## Peculiaridades del proyecto
+
+1. **Tiempo casi real.** Las cuotas cambian constantemente; el colector debe consultar APIs cada pocos segundos/minutos y el detector debe procesar con **baja latencia**.
+2. **Formatos de cuotas.** Decimal, fraccionario y americano deben normalizarse a **decimal**; también las **monedas** (USD, PEN, EUR) deben convertirse para comparar correctamente.
+3. **El margen de la casa (*overround*).** Cada casa cobra un margen; el arbitraje solo aparece cuando los márgenes de distintas casas "no se solapan" para un mismo evento.
+4. **Riesgos operativos:**
+   - Cuotas **anuladas o canceladas** por errores o eventos suspendidos.
+   - **Límites de apuesta** y restricciones de cuenta por parte de las casas.
+   - Requisitos de **rollover** en bonos que alteran la rentabilidad real.
+5. **Aspectos legales y de uso responsable.** Este proyecto tiene fines **académicos y educativos**. Debe respetarse la legislación local y los **Términos de Servicio** de cada plataforma; se trabajará preferentemente con **APIs oficiales** y scraping moderado.
+6. **Calidad del scraping.** Las páginas cambian su estructura (HTML/CSS); los selectores deben versionarse y monitorearse (alertas cuando un selector deja de funcionar).
+7. **Confirmación de cuota.** La cuota mostrada puede no ser la cuota aceptada; el pipeline debe registrar también el resultado real de la apuesta para medir la rentabilidad efectiva.
+
+## Herramientas R sugeridas
+
+- `httr2` — consumo de APIs REST con manejo de *rate limits* y reintentos.
+- `rvest` — web scraping estructurado.
+- `jsonlite` — parseo de respuestas JSON.
+- `lubridate` — manejo de fechas/horas y zonas horarias (eventos internacionales).
+- `DT` / `shiny` — tablero de oportunidades y simulador de apuestas.
+- `RPostgres` / `DBI` — escritura de snapshots en PostgreSQL.
+
+## Arquitectura del pipeline
+
+```{r pipeline-arbitraje, echo=TRUE, eval=FALSE, class.source="mermaid"}
+flowchart LR
+  C[Colector<br/>APIs + scraping] -->|snapshot de cuotas| BD[(PostgreSQL)]
+  BD --> D[Detector de arbitraje<br/>R · overround < 1]
+  D --> AL[Alertas<br/>Telegram / correo]
+  D --> DB2[Dashboard<br/>flexdashboard]
+  CRON[Contenedor worker<br/>scheduler · Docker] -.-> C
+```
+
+## Diseño de la base de datos
+
+- **`eventos`** — `id_evento`, `deporte`, `competicion`, `equipo_local`, `equipo_visita`, `fecha_inicio`, `estado`.
+- **`mercados`** — `id_mercado`, `id_evento`, `tipo_mercado` (1X2, doble oportunidad, etc.), `nombre_resultado`.
+- **`cuotas_snapshot`** — `id`, `id_mercado`, `casa`, `cuota_decimal`, `moneda`, `capturado_at` (con índice en `capturado_at`).
+- **`oportunidades`** — arbitrajes detectados: `id_evento`, `fecha`, `overround`, `beneficio_esperado`, `status` (abierta, ejecutada, anulada).
+
+## Entregables esperados
+
+1. Colector de cuotas reproducible (Docker + scheduler) con almacenamiento en PostgreSQL.
+2. **Detector de arbitraje** con alertas automáticas.
+3. Dashboard con oportunidades en vivo e histórico de rentabilidad simulada.
+4. Informe de **retroalimentación (ejecución simulada)** con métricas de eficiencia del detector.
+
+# Plataforma colaborativa: GitHub
+
+GitHub es el **pilar central** del curso: almacena código y documentación, distribuye los avances y habilita el trabajo colaborativo (control de versiones, revisión y automatización).
+
+## Estructura del repositorio
+
+Proponemos un **monorepositorio** con una carpeta por proyecto, más recursos compartidos:
+
+```text
+bi-2026/
+├── README.md                     # portada del curso y guía de inicio
+├── LICENSE
+├── .gitignore                    # excluye .env, *.csv grandes, docs compilados
+├── .env.example                  # plantilla de variables de entorno (sin claves reales)
+├── .github/
+│   └── workflows/
+│       ├── render-reportes.yaml  # compila RMD en cada push
+│       └── deploy-netlify.yaml   # despliega la carpeta docs/
+├── docs/                         # sitio estático que se publica (Vercel/Netlify)
+├── shared/                       # helpers comunes entre proyectos
+│   ├── R/                        # funciones de conexión a BD, logging
+│   └── sql/                      # scripts DDL compartidos
+├── universo_monetario/
+│   ├── research/                 # indagaciones iniciales en internet (notas)
+│   ├── data/raw/  data/processed/
+│   ├── etl/  analysis/  models/  reports/
+├── trading_cuantitativo/         # misma estructura interna
+└── arbitraje_apuestas/           # misma estructura interna
+```
+
+## Flujo de trabajo colaborativo
+
+1. Cada estudiante/equipo trabaja en una **rama** (`feature/universo-monetario-etl`).
+2. Cada avance se integra mediante **Pull Request** con revisión por compañeros y, cuando corresponde, por un **agente de IA** (sección 8).
+3. Los problemas y tareas se gestionan con **Issues** y el tablero **Projects** (Kanban).
+4. **`main`** siempre debe compilar: los *workflows* de CI ejecutan los reportes y avisan si algo falla.
+
+## GitHub Actions (CI/CD)
+
+Un primer flujo que garantiza que los RMarkdown del curso siempre se puedan compilar:
+
+```yaml
+# .github/workflows/render-reportes.yaml
+name: Render de reportes RMarkdown
+on:
+  push:
+    paths: ["**/*.Rmd", ".github/workflows/render-reportes.yaml"]
+  workflow_dispatch:
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    container: rocker/verse:4.4.1   # imagen R con pandoc incluido
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restaurar entorno R con renv
+        run: |
+          Rscript -e 'install.packages("renv")'
+          Rscript -e 'renv::restore()'
+      - name: Compilar reportes
+        run: |
+          Rscript -e 'rmarkdown::render("Proyectos_BI_2026.Rmd", output_dir = "docs")'
+      - name: Publicar artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: reportes-html
+          path: docs/
+```
+
+## Buenas prácticas
+
+- **Nunca subir claves** de APIs ni contraseñas: se usan *secrets* de GitHub o variables de entorno locales (`.env` no versionado).
+- Archivos grandes (CSV crudos) fuera del repositorio (en BD o con Git LFS) para mantener el repositorio liviano.
+- `README.md` por proyecto: objetivo, cómo ejecutarlo y cómo citar el trabajo.
+- Versionado semántico de los modelos y de los reportes publicados.
+
+# Desarrollo con agentes de IA en la terminal (herdr)
+
+El curso desarrollará el proceso BI apoyándose en **agentes de inteligencia artificial** (Gemini, Claude, ChatGPT y otros), operados desde la **terminal / línea de comandos** en cualquier sistema operativo (Linux, macOS, Windows). Esto permite:
+
+- Iterar rápido sobre scripts de scraping, ETL y modelado.
+- Tener **revisión de código** asistida por IA en cada Pull Request.
+- Documentar y refactorizar código siguiendo las convenciones del curso.
+- Ejecutar agentes de forma **paralela y persistente** en paneles de terminal.
+
+## CLIs de agentes que usaremos
+
+| Agente | Comando CLI | Instalación (Node.js) | Clave de API |
+|---|---|---|---|
+| **Claude** | `claude` | `npm i -g @anthropic-ai/claude-code` | `ANTHROPIC_API_KEY` |
+| **Gemini** | `gemini` | `npm i -g @google/gemini-cli` | `GEMINI_API_KEY` |
+| **ChatGPT** | `chatgpt` / API | `npm i -g @chatgpt/cli` o vía API | `OPENAI_API_KEY` |
+| **Codex (OpenAI)** | `codex` | `npm i -g @openai/codex` | `OPENAI_API_KEY` |
+
+Las claves se cargan como **variables de entorno** (nunca en el repositorio):
+
+```bash
+# ~/.bashrc  o  ~/.zshrc  (Linux/macOS)  ·  setx (Windows)
+export ANTHROPIC_API_KEY="sk-ant-..."
+export GEMINI_API_KEY="..."
+export OPENAI_API_KEY="sk-..."
+```
+
+## herdr: el runtime de los agentes de IA
+
+**[`herdr`](https://github.com/herdrdev/herdr)** es una herramienta de código abierto (Apache-2.0, escrita en Rust) descrita como *"the runtime your coding agents live on"*. Es un **servidor de fondo + multiplexor de terminal** donde viven los agentes:
+
+- **Siempre corriendo.** Al cerrar la tapa del portátil o reiniciar, los agentes siguen trabajando y las sesiones se recuperan (`herdr reattach`).
+- **Paneles tipo tmux** con estado visible: cada panel se marca como *working*, *blocked* o *idle*.
+- **No reemplaza a los agentes**: ejecuta lo que ya usamos (Claude Code, Codex, Gemini CLI, Cursor, opencode, etc.) y les da un entorno de terminal propio.
+- **Agent-native**: los propios agentes pueden abrir paneles, comunicarse entre sí y esperar a que otro agente termine, vía CLI y socket API.
+- **Keyboard + mouse**, combinación de prefijos estilo tmux (`Ctrl+b q` para desacoplar), y **plugins** (mercado de extensiones).
+- **Instalación simple** y funciona en la terminal de cualquier sistema operativo.
+
+```bash
+# Instalación de herdr
+curl -fsSL https://herdr.dev/install.sh | sh    # Linux/macOS
+brew install herdr                               # macOS (Homebrew)
+powershell -ExecutionPolicy Bypass -c "irm https://herdr.dev/install.ps1 | iex"   # Windows
+
+# Uso básico
+herdr run            # inicia el servidor y abre la interfaz
+# ... Ctrl+b q para desacoplar (detach); los agentes continúan
+herdr reattach       # volver a conectarse desde cualquier terminal o por SSH
+```
+
+### Flujo de trabajo típico con herdr
+
+1. Abrimos `herdr run` en la carpeta del proyecto.
+2. En un panel lanzamos `claude`; en otro, `gemini` (o `codex`).
+3. El agente de ETL escribe el script de descarga; el agente de análisis revisa el código y propone mejoras; un tercer panel monitorea el log de la base de datos.
+4. Cada agente trabaja sobre el repositorio Git; al terminar crea su rama y un Pull Request.
+5. Al cerrar el portátil todo sigue corriendo; al volver, `herdr reattach` restaura la sesión.
+
+### AGENTS.md: contexto para los agentes
+
+Recomendamos crear un archivo **`AGENTS.md`** en la raíz del repositorio para que cualquier agente conozca las reglas del curso:
+
+```markdown
+# AGENTS.md — Guía para agentes de IA del curso BI-2
+
+- Idioma de código y comentarios: español e inglés (documentación en español).
+- Estructura: un proyecto por carpeta (universo_monetario, trading_cuantitativo, arbitraje_apuestas).
+- Conexión a base de datos: siempre vía DBI (R) y variables de entorno, nunca credenciales en código.
+- Antes de proponer cambios grandes, resumir el plan y pedir confirmación.
+- Cada tarea nueva debe registrarse como Issue en GitHub.
+```
+
+### Alternativas sin herdr
+
+Si algún integrante prefiere trabajar sin `herdr`, los agentes también se usan directamente en la terminal (`claude`, `gemini`, `codex`) o integrados en editores (VS Code / Cursor). El resultado final (ramas, PRs, reportes) es el mismo.
+
+# Docker: aislamiento de los entornos de trabajo
+
+Docker garantiza que **todos los integrantes ejecuten el mismo entorno** sin importar el sistema operativo: misma versión de R, mismos paquetes, misma base de datos.
+
+## Imágenes base recomendadas
+
+| Imagen | Uso |
+|---|---|
+| `rocker/r-ver:4.4.1` | R base, versión fija (mínima) |
+| `rocker/tidyverse:4.4.1` | R + tidyverse para ETL y análisis |
+| `rocker/verse:4.4.1` | R + tidyverse + pandoc (recomendada para compilar RMarkdown) |
+| `postgres:16` | Base de datos PostgreSQL |
+| `rocker/rstudio:4.4.1` | RStudio Server accesible desde el navegador |
+
+## docker-compose del curso
+
+Ejemplo de un entorno integrado (base de datos + RStudio + agente de trabajo):
+
+```yaml
+# docker-compose.yml
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: bi
+      POSTGRES_PASSWORD: bi_secret    # solo para desarrollo local
+      POSTGRES_DB: bi
+    volumes:
+      - pgdata:/var/lib/postgresql/data   # datos persistentes
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bi"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  rstudio:
+    image: rocker/rstudio:4.4.1
+    environment:
+      PASSWORD: rstudio
+    ports:
+      - "8787:8787"
+    volumes:
+      - .:/home/rstudio/proyecto          # código del curso montado
+    depends_on:
+      db:
+        condition: service_healthy
+
+  worker:
+    image: rocker/verse:4.4.1
+    volumes:
+      - .:/home/rstudio/proyecto
+    command: ["tail", "-f", "/dev/null"]   # contenedor para tareas programadas (ETL, detector)
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+```
+
+## Comandos de uso frecuente
+
+```bash
+docker compose up -d          # levanta todos los servicios
+docker compose ps             # estado de los servicios
+docker compose exec rstudio bash    # terminal dentro del contenedor R
+docker compose exec db psql -U bi   # consola SQL
+docker compose down           # detiene (sin borrar los datos del volumen)
+```
+
+## Ventajas concretas para el curso
+
+- **Reproducibilidad**: el reporte RMD compila igual en casa que en el laboratorio.
+- **Aislamiento por proyecto**: cada proyecto puede tener su propia imagen o su propio `docker-compose` (con `--profile` si se desea levantar solo uno).
+- **Seguridad**: las claves de APIs se pasan como variables de entorno al contenedor, sin exponerlas.
+- **CI/CD**: la misma imagen se usa en GitHub Actions, por lo que lo probado localmente es lo que corre en el servidor.
+
+# Versionamiento del entorno R con renv
+
+## Qué es renv
+
+**`renv`** es el estándar de R para la **reproducibilidad del entorno de paquetes**: crea una **biblioteca local al proyecto** y registra las versiones exactas de cada paquete en el archivo **`renv.lock`**. Complementa a Docker: mientras Docker fija la imagen del sistema operativo y de R, `renv` fija **las versiones de los paquetes** usados en los ETL, análisis y reportes.
+
+Beneficios para el curso:
+
+- Todos los integrantes y la CI usan **exactamente los mismos paquetes y versiones**.
+- Un compañero nuevo reproduce el entorno completo con un solo comando (`renv::restore()`).
+- Los reportes que hoy se compilan seguirán compilando **en el futuro**, aunque CRAN publique versiones nuevas.
+
+## Flujo de trabajo con renv
+
+```bash
+# 1. Inicializar renv en el proyecto (crea renv/ y renv.lock)
+Rscript -e 'renv::init()'
+
+# 2. Tras instalar cada paquete nuevo, actualizar el lockfile
+Rscript -e 'renv::snapshot()'
+
+# 3. Un integrante nuevo (o la CI) restaura el entorno exacto
+Rscript -e 'renv::restore()'
+```
+
+Comandos de apoyo:
+
+- `renv::status()` — indica si `renv.lock` está desactualizado.
+- `renv::update()` — actualiza los paquetes y regenera el lockfile.
+- `renv::history()` / `renv::revert()` — recupera versiones anteriores del lockfile.
+- `renv::isolate()` — separa por completo el proyecto de la biblioteca del sistema.
+
+## Integración con GitHub
+
+- **Versionar** `renv.lock` y la carpeta `renv/`; **no versionar** `renv/library/` (biblioteca local). El `.gitignore` debe incluir `renv/library/`.
+- En GitHub Actions, restaurar el entorno **antes** de compilar reportes:
+
+```yaml
+      - name: Restaurar entorno R con renv
+        run: |
+          Rscript -e 'install.packages("renv")'
+          Rscript -e 'renv::restore()'
+      - name: Compilar reportes
+        run: Rscript -e 'rmarkdown::render("Proyectos_BI_2026.Rmd", output_dir = "docs")'
+```
+
+## Integración con Docker
+
+En el `Dockerfile` se copia `renv.lock` **antes** del resto del código para aprovechar la **caché de capas** de Docker (si el lockfile no cambió, la instalación de paquetes no se repite):
+
+```dockerfile
+# Dockerfile con rocker/verse + renv
+FROM rocker/verse:4.4.1
+
+# 1. Lockfile y configuración de renv primero (aprovecha caché de Docker)
+COPY renv.lock renv.lock
+COPY renv/ renv/
+
+# 2. Restaurar el entorno exacto de paquetes
+RUN Rscript -e 'install.packages("renv"); renv::restore()'
+
+# 3. Código del proyecto
+COPY . .
+
+CMD ["Rscript", "-e", "rmarkdown::render('Proyectos_BI_2026.Rmd')"]
+```
+
+## Buenas prácticas
+
+- Ejecutar `renv::snapshot()` tras cada instalación y commitear el `renv.lock` con su mensaje (`chore: snapshot renv tras añadir httr2`).
+- Registrar en el `README.md` los pasos para clonar y restaurar (`renv::restore()`).
+- En CI y en Docker usar **la misma imagen base** (`rocker/verse:4.4.1`) para que coincidan también las herramientas de sistema (pandoc, librerías).
+
+# Sistema de base de datos
+
+## Elección: PostgreSQL
+
+**PostgreSQL 16** es el sistema recomendado por ser:
+
+- Código abierto, robusto y ampliamente usado en BI.
+- Excelente integración con R vía `DBI` + `RPostgres` (`dbConnect`, `dbWriteTable`, `dbGetQuery`).
+- Soporte de **JSON**, consultas con índices, particionado por tiempo y transacciones.
+- Se ejecuta en Docker sin configuración extra.
+
+```{r conexion-bd, echo=TRUE, eval=FALSE}
+# Conexión desde R a PostgreSQL (requiere paquete RPostgres y el contenedor db activo)
+# library(DBI)
+# library(RPostgres)
+# con <- dbConnect(
+#   RPostgres::Postgres(),
+#   host   = Sys.getenv("PGHOST", "localhost"),
+#   dbname = Sys.getenv("PGDATABASE", "bi"),
+#   user   = Sys.getenv("PGUSER", "bi"),
+#   password = Sys.getenv("PGPASSWORD", "bi_secret")
+# )
+# dbGetQuery(con, "SELECT count(*) FROM cuotas_snapshot")
+# dbDisconnect(con)
+```
+
+## Modelo de datos por proyecto
+
+| Proyecto | Tablas principales | Notas de diseño |
+|---|---|---|
+| Universo Monetario | `series`, `valores` | Formato largo; `snapshot_at` para versiones |
+| Trading Cuantitativo | `ohlcv`, `signals` | Índice `(simbolo, fecha)`; partición temporal intradía |
+| Arbitraje | `eventos`, `mercados`, `cuotas_snapshot`, `oportunidades` | Alto volumen de escritura; índice en `capturado_at` |
+
+## Alternativas complementarias
+
+- **DuckDB** — base embebida analítica (columnar) ideal para prototipos y exploración local sin servidor.
+- **TimescaleDB** — extensión de PostgreSQL optimizada para series de tiempo (opcional si los datos intradía crecen).
+- **SQLite** — para prototipos rápidos y datos pequeños en una sola máquina.
+
+# Publicación de resultados (Vercel / Netlify)
+
+## Filosofía: publicar desde el inicio
+
+El curso **publica de forma incremental**, desde las primeras indagaciones hasta los modelos finales:
+
+1. **Fase de indagación** — notas de investigación inicial en internet (qué fuentes existen, qué APIs usar), publicadas como documentos de investigación.
+2. **Fase de datos** — diccionarios de datos, catálogos de series y primeros ETL documentados.
+3. **Fase de análisis** — reportes RMarkdown con exploración, gráficos y primeros hallazgos.
+4. **Fase de modelos** — backtests, proyecciones, detector de arbitraje, con su metodología y métricas.
+5. **Fase final** — dashboards interactivos y reporte ejecutivo del curso.
+
+Cada fase deja **artefactos HTML estáticos** que se publican en la misma carpeta `docs/`.
+
+## Herramientas de generación
+
+- **RMarkdown** (`html_document`, `flexdashboard`) — reportes y tableros. Este mismo documento es un ejemplo.
+- **Quarto** — alternativa moderna con mejor soporte para publicar sitios completos.
+- **`distill`** — artículos científicos en RMarkdown.
+
+El resultado siempre es una **carpeta de archivos estáticos** (HTML + CSS + JS + imágenes) que puede alojarse en cualquier hosting estático.
+
+## Flujo de publicación
+
+```{r diagrama-publicacion, echo=TRUE, eval=FALSE, class.source="mermaid"}
+flowchart LR
+  R[RMarkdown / flexdashboard<br/>reportes del curso] -->|rmarkdown::render| D[docs/]
+  D -->|push a GitHub| GH[(Repositorio GitHub)]
+  GH -->|integración / deploy| N[Netlify]
+  GH -->|integración / deploy| V[Vercel]
+  N --> URL1[https://curso-bi-2026.netlify.app]
+  V --> URL2[https://curso-bi-2026.vercel.app]
+```
+
+### Opción A — Deploy automático desde GitHub (recomendada)
+
+1. Crear el sitio en **Netlify** o **Vercel** y conectarlo al repositorio de GitHub.
+2. Indicar la **carpeta de publicación** `docs/`.
+3. (Opcional) Build command para compilar los RMD en el servicio. Como Vercel/Netlify no incluyen R por defecto, lo más fiable es **compilar con GitHub Actions** y desplegar el resultado:
+
+```yaml
+# .github/workflows/deploy-netlify.yaml
+name: Deploy a Netlify
+on:
+  push:
+    branches: [main]
+    paths: ["docs/**"]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy docs a Netlify
+        uses: nwtgck/actions-netlify@v3
+        with:
+          publish-dir: docs
+          production-deploy: true
+          deploy-message: "Deploy automático de reportes BI"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+```
+
+### Opción B — Deploy manual con la CLI
+
+```bash
+# Localmente (el HTML ya fue compilado en docs/)
+npm i -g netlify-cli
+netlify deploy --dir docs --prod        # Netlify
+
+npm i -g vercel
+vercel --prod docs                      # Vercel
+```
+
+## Consideraciones
+
+- **Nada de claves ni datos sensibles** en los sitios públicos: los reportes publicados muestran resultados agregados y métodos; las credenciales viven solo en los contenedores.
+- **Versionado**: cada publicación se asocia a un *commit* de GitHub (la URL de preview en PR permite revisar antes de publicar).
+- **Enlaces persistentes**: los reportes importantes se publican con fecha en el nombre (`reporte_universo_monetario_2026-02.html`) para conservar trazabilidad.
+
+# Hoja de ruta del curso
+
+| Etapa | Actividades | Hitos verificables |
+|---|---|---|
+| **0. Infraestructura** | Repositorio GitHub, claves de API, instalación de `herdr`, Docker, R y PostgreSQL | `docker compose up -d` funciona; primer `git push` |
+| **1. Indagación** | Investigación en internet de fuentes, APIs y referencias por proyecto | Notas publicadas en `research/` y en el sitio web |
+| **2. Datos** | Primeros ETL; carga inicial en PostgreSQL; diccionarios de datos | Tablas pobladas y verificadas con consultas SQL |
+| **3. Exploración** | Análisis exploratorio y primeros reportes RMD por proyecto | Reportes publicados en Netlify/Vercel |
+| **4. Modelos** | Modelos predictivos/descriptivos; backtesting; detector de arbitraje | Métricas documentadas; informe de validación |
+| **5. Automatización** | Scheduler, alertas, CI/CD completo, reportes auto-renderizados | Pipeline corre sin intervención manual |
+| **6. Cierre** | Reporte ejecutivo del curso y presentación final | Sitio final actualizado y repositorio consolidado |
+
+## Checklist de inicio (primera sesión)
+
+- [ ] Crear el repositorio `bi-2026` en GitHub (equipo) y clonarlo.
+- [ ] Instalar: git, Docker, R, pandoc, rmarkdown (ver Apéndice A).
+- [ ] Instalar `herdr` y los CLIs de agentes (Claude, Gemini, Codex).
+- [ ] Configurar variables de entorno con las claves de APIs.
+- [ ] Levantar PostgreSQL con `docker compose up -d`.
+- [ ] Inicializar `renv` para fijar las versiones de paquetes R: `Rscript -e 'renv::init()'`.
+- [ ] Compilar este documento: `Rscript -e 'rmarkdown::render("Proyectos_BI_2026.Rmd")'`.
+
+# Apéndice A — Instalación por sistema operativo
+
+## Linux (Debian/Ubuntu)
+
+```bash
+# git, curl, node, docker
+sudo apt update && sudo apt install -y git curl nodejs npm
+curl -fsSL https://get.docker.com | sh
+sudo usermod -aG docker $USER        # cerrar sesión y volver a entrar
+
+# R + rmarkdown + renv
+sudo apt install -y r-base
+Rscript -e 'install.packages(c("rmarkdown","knitr","flexdashboard","renv"))'
+
+# herdr + agentes
+curl -fsSL https://herdr.dev/install.sh | sh
+npm i -g @anthropic-ai/claude-code @google/gemini-cli @openai/codex
+```
+
+## macOS
+
+```bash
+# Homebrew como gestor de paquetes
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+brew install git node docker r --cask  # R también por cask
+Rscript -e 'install.packages(c("rmarkdown","knitr","flexdashboard","renv"))'
+brew install herdr                      # herdr
+npm i -g @anthropic-ai/claude-code @google/gemini-cli @openai/codex
+```
+
+## Windows
+
+```powershell
+# 1. Instalar desde los instaladores oficiales:
+#    git-scm.com · docker.com/products/docker-desktop · cran.r-project.org
+# 2. Node.js (LTS):  nodejs.org
+# 3. En PowerShell:
+npm i -g @anthropic-ai/claude-code @google/gemini-cli @openai/codex
+powershell -ExecutionPolicy Bypass -c "irm https://herdr.dev/install.ps1 | iex"
+Rscript -e "install.packages(c('rmarkdown','knitr','flexdashboard','renv'))"
+```
+
+> En los tres sistemas, validar con: `docker compose version`, `R --version`, `claude --version`, `herdr --version`.
+
+# Apéndice B — Variables de entorno
+
+```bash
+# .env.example (nunca versionar .env)
+GEMINI_API_KEY=
+ANTHROPIC_API_KEY=
+OPENAI_API_KEY=
+THEODDS_API_KEY=          # arbitraje
+ALPHAVANTAGE_API_KEY=     # trading
+FRED_API_KEY=             # universo monetario
+PGHOST=localhost
+PGDATABASE=bi
+PGUSER=bi
+PGPASSWORD=bi_secret
+```
+
+# Apéndice C — Recursos y referencias
+
+- Proceso BI del curso: `Diagrama_BI.md`, `R_para_BI.md` (misma carpeta).
+- [herdr](https://github.com/herdrdev/herdr) — runtime de agentes en terminal.
+- [rocker-project](https://rocker-project.org/) — imágenes Docker de R.
+- [RStudio / RMarkdown](https://rmarkdown.rstudio.com/) — documentación oficial.
+- [FRED](https://fred.stlouisfed.org/) · [IMF API](https://www.imf.org/en/Data) · [Banco Mundial](https://data.worldbank.org/) — universo monetario.
+- [Yahoo Finance / quantmod](https://www.quantmod.com/) · [Binance API](https://binance-docs.github.io/apidocs/) — trading.
+- [The Odds API](https://the-odds-api.com/) · [Betfair API](https://docs.developer.betfair.com/) — arbitraje.
+- [Netlify](https://www.netlify.com/) · [Vercel](https://vercel.com/) — publicación.
+
+---
+
+*Documento generado en RMarkdown como parte de la Unidad 1 del curso de Business Intelligence (BI-2).*

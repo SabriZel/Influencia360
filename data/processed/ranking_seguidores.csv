@@ -1,0 +1,651 @@
+posicion,usuario_id,usuario,nombre,pais,nicho,seguidos,interacciones_emitidas,reciprocidad,score_seguidor,clase_seguidor,prob_seguidor_alta
+1,USR0188,albakub0188,Alba Kub,Argentina,Viajes,27,75,0.037037037037037035,83.08166409861325,Alto,0.996
+2,USR0079,bonitakautzer0079,Bonita Kautzer,Chile,Deportes,21,89,0.047619047619047616,89.56086286594761,Alto,0.994
+3,USR0310,arrarosenbaumd0310,Arra Rosenbaum DVM,Perú,Moda,10,85,0.1,75.7935285053929,Alto,0.992
+4,USR0060,mrslenoreluett0060,Mrs. Lenore Luettgen MD,Perú,Gastronomía,15,69,0.06666666666666667,74.26040061633282,Alto,0.992
+5,USR0362,carienitzscheb0362,Carie Nitzsche-Batz,Bolivia,Tecnología,15,82,0.13333333333333333,86.69491525423729,Alto,0.99
+6,USR0253,marthakeeling0253,Martha Keeling,Chile,Gastronomía,15,81,0.06666666666666667,81.47149460708782,Alto,0.99
+7,USR0209,makaylahermist0209,Makayla Hermiston,Bolivia,Gastronomía,19,70,0.05263157894736842,79.32973805855161,Alto,0.99
+8,USR0413,drshaniapfanne0413,Dr. Shania Pfannerstill PhD,Perú,Viajes,18,70,0.05555555555555555,78.69029275808937,Alto,0.99
+9,USR0093,christenkonope0093,Christen Konopelski,Chile,Viajes,15,67,0.06666666666666667,73.28967642526965,Alto,0.99
+10,USR0233,ahbayer0233,Ah Bayer,Argentina,Deportes,16,65,0.0625,72.6271186440678,Alto,0.99
+11,USR0046,alstoncrooks0046,Alston Crooks,Bolivia,Gastronomía,9,72,0.1111111111111111,66.74884437596302,Alto,0.99
+12,USR0640,nicholwuckert0640,Nichol Wuckert,Bolivia,Gastronomía,10,66,0.1,64.90755007704159,Alto,0.99
+13,USR0645,melodymurazik0645,Melody Murazik,Bolivia,Educación,17,84,0.058823529411764705,85.35439137134053,Alto,0.988
+14,USR0366,mrjaymecole0366,Mr. Jayme Cole,Bolivia,Educación,16,88,0.0625,85.17719568567026,Alto,0.988
+15,USR0316,isabelaschmele0316,Isabela Schmeler,Bolivia,Moda,21,78,0.047619047619047616,84.29121725731895,Alto,0.988
+16,USR0525,rodneywalkeriv0525,Rodney Walker IV,Perú,Moda,16,82,0.0625,82.88906009244992,Alto,0.988
+17,USR0005,juliannschaden0005,Juliann Schaden,Bolivia,Deportes,18,77,0.05555555555555555,82.22650231124807,Alto,0.988
+18,USR0375,fayetteabernat0375,Fayette Abernathy,Bolivia,Moda,18,71,0.05555555555555555,79.175654853620955,Alto,0.988
+19,USR0617,leathamurphy0617,Leatha Murphy,Colombia,Moda,13,76,0.07692307692307693,75.25423728813558,Alto,0.988
+20,USR0567,darlineroberts0567,Darline Roberts DVM,Colombia,Educación,13,65,0.15384615384615385,72.66563944530047,Alto,0.988
+21,USR0544,drkristifadelm0544,Dr. Kristi Fadel MD,Colombia,Educación,12,71,0.08333333333333333,71.47149460708782,Alto,0.988
+22,USR0098,cathrynaltenwe0098,Cathryn Altenwerth,Chile,Educación,10,77,0.1,71.35593220338983,Alto,0.988
+23,USR0542,latarshawisoky0542,Latarsha Wisoky PhD,Bolivia,Deportes,12,66,0.08333333333333333,68.07395993836671,Alto,0.988
+24,USR0251,tinycummerata0251,Tiny Cummerata,Colombia,Gastronomía,22,80,0.09090909090909091,90.43143297380584,Alto,0.986
+25,USR0035,ezellschimmel0035,Ezell Schimmel,Chile,Educación,18,89,0.05555555555555555,88.3281972265023,Alto,0.986
+26,USR0246,carriehoeger0246,Carrie Hoeger,Perú,Deportes,25,69,0.08,83.82126348228043,Alto,0.986
+27,USR0201,clemensvon0201,Clemens Von,Chile,Moda,16,83,0.0625,83.58243451463791,Alto,0.986
+28,USR0075,pattyparisianw0075,Patty Parisian-Wolf,Chile,Moda,19,74,0.05263157894736842,80.92449922958397,Alto,0.986
+29,USR0291,cameronokeefe0291,Cameron O'Keefe,Bolivia,Gastronomía,16,77,0.0625,79.63020030816641,Alto,0.986
+30,USR0513,drcorrinanicol0513,Dr. Corrina Nicolas,Colombia,Educación,14,75,0.07142857142857142,75.755007704160235,Alto,0.986
+31,USR0446,dillonjenkinsv0446,Dillon Jenkins V,Bolivia,Gastronomía,13,77,0.07692307692307693,75.73959938366717,Alto,0.986
+32,USR0623,ritaweimann0623,Rita Weimann,Colombia,Viajes,12,66,0.08333333333333333,68.07395993836671,Alto,0.986
+33,USR0286,tyreemiller0286,Tyree Miller,Colombia,Viajes,17,79,0.17647058823529413,89.05238828967641,Alto,0.984
+34,USR0021,sampsonullrich0021,Sampson Ullrich,Bolivia,Educación,14,99,0.07142857142857142,84.07550077041603,Alto,0.984
+35,USR0309,ivyabbottschow0309,Ivy Abbott-Schowalter,Bolivia,Viajes,17,77,0.058823529411764705,81.12480739599383,Alto,0.984
+36,USR0492,oziecummerata0492,Ozie Cummerata,Argentina,Deportes,14,80,0.07142857142857142,79.15254237288136,Alto,0.984
+37,USR0334,juliannagottli0334,Julianna Gottlieb,Argentina,Viajes,16,71,0.0625,76.5793528505393,Alto,0.984
+38,USR0598,misszoiebartol0598,Miss Zoie Bartoletti,Colombia,Tecnología,9,92,0.1111111111111111,75.97072419106318,Alto,0.984
+39,USR0603,irwinwyman0603,Irwin Wyman,Bolivia,Viajes,16,67,0.0625,74.29121725731895,Alto,0.984
+40,USR0541,roddystreich0541,Roddy Streich,Bolivia,Gastronomía,16,65,0.0625,72.6271186440678,Alto,0.984
+41,USR0613,alishapaucekmd0613,Alisha Paucek MD,Bolivia,Gastronomía,13,68,0.07692307692307693,71.02465331278891,Alto,0.984
+42,USR0424,byronmayert0424,Byron Mayert,Perú,Moda,11,69,0.09090909090909091,68.35130970724191,Alto,0.984
+43,USR0336,bularobelbahri0336,Bula Robel-Bahringer,Bolivia,Gastronomía,20,79,0.05,84.41448382126347,Alto,0.982
+44,USR0386,mairamarvin0386,Maira Marvin,Argentina,Moda,18,79,0.05555555555555555,83.54391371340523,Alto,0.982
+45,USR0010,cassidyrath0010,Cassidy Rath,Colombia,Viajes,12,80,0.16666666666666666,80.1386748844376,Alto,0.982
+46,USR0355,genovevachrist0355,Genoveva Christiansen,Perú,Tecnología,13,83,0.07692307692307693,79.69183359013867,Alto,0.982
+47,USR0068,abhalvorson0068,Ab Halvorson,Colombia,Tecnología,20,70,0.05,79.56086286594761,Alto,0.982
+48,USR0397,noelleullrich0397,Noelle Ullrich,Perú,Gastronomía,16,75,0.0625,78.38212634822804,Alto,0.982
+49,USR0559,olenahintz0559,Olena Hintz,Colombia,Moda,21,86,0.047619047619047616,88.24345146379045,Alto,0.98
+50,USR0038,havenhilpertko0038,Haven Hilpert-Koch,Bolivia,Moda,20,87,0.05,88.22804314329737,Alto,0.98
+51,USR0106,madlynkiehn0106,Madlyn Kiehn,Perú,Moda,15,94,0.06666666666666667,85.49306625577813,Alto,0.98
+52,USR0564,dericgrimesii0564,Deric Grimes II,Chile,Educación,15,87,0.06666666666666667,83.75963020030817,Alto,0.98
+53,USR0306,billiebechtela0306,Billie Bechtelar V,Chile,Viajes,19,76,0.05263157894736842,82.38058551617874,Alto,0.98
+54,USR0458,martezhirthe0458,Martez Hirthe,Chile,Educación,10,87,0.1,76.48690292758089,Alto,0.98
+55,USR0013,mradamwalterii0013,Mr. Adam Walter III,Argentina,Deportes,11,72,0.09090909090909091,70.15408320493066,Alto,0.98
+56,USR0609,michelleleffle0609,Michelle Leffler,Chile,Gastronomía,19,87,0.05263157894736842,87.99691833590138,Alto,0.978
+57,USR0438,bettyjanekub0438,Bettyjane Kub,Perú,Viajes,14,66,0.07142857142857142,70.55469953775038,Alto,0.978
+58,USR0340,bethelorn0340,Bethel Orn,Bolivia,Moda,9,75,0.1111111111111111,68.0662557781202,Alto,0.978
+59,USR0022,albertinezulau0022,Albertine Zulauf,Chile,Gastronomía,20,90,0.1,94.4684129429892,Alto,0.976
+60,USR0073,mrtreytonparke0073,Mr. Treyton Parker III,Colombia,Gastronomía,22,88,0.09090909090909091,93.82896764252696,Alto,0.976
+61,USR0543,mrorlinkovacek0543,Mr. Orlin Kovacek,Colombia,Gastronomía,14,86,0.14285714285714285,86.31741140215716,Alto,0.976
+62,USR0064,drverlemoen0064,Dr. Verle Moen,Bolivia,Educación,20,75,0.05,81.84899845916794,Alto,0.976
+63,USR0343,nickolasokon0343,Nickolas O'Kon,Bolivia,Viajes,16,74,0.0625,77.68875192604006,Alto,0.976
+64,USR0380,crystawhite0380,Crysta White,Bolivia,Deportes,17,105,0.058823529411764705,88.47457627118644,Alto,0.974
+65,USR0288,blazeparker0288,Blaze Parker,Bolivia,Educación,18,69,0.05555555555555555,77.85824345146378,Alto,0.974
+66,USR0218,karsonokeefe0218,Karson O'Keefe,Bolivia,Moda,13,79,0.07692307692307693,77.05701078582435,Alto,0.974
+67,USR0607,desmondblanda0607,Desmond Blanda,Bolivia,Moda,14,70,0.07142857142857142,73.4668721109399,Alto,0.974
+68,USR0499,denniejones0499,Dennie Jones,Chile,Deportes,14,67,0.07142857142857142,71.66409861325116,Alto,0.974
+69,USR0270,garnethermisto0270,Garnet Hermiston,Perú,Gastronomía,11,87,0.09090909090909091,77.85053929121725,Alto,0.97
+70,USR0460,missvessieherz0460,Miss Vessie Herzog MD,Bolivia,Viajes,13,53,0.07692307692307693,59.37596302003081,Alto,0.968
+71,USR0128,ethelbertbashi0128,Ethelbert Bashirian,Bolivia,Tecnología,9,68,0.1111111111111111,64.59938366718028,Alto,0.966
+72,USR0565,reecezulaufmil0565,Reece Zulauf-Mills,Bolivia,Gastronomía,16,52,0.0625,62.365177195685675,Alto,0.966
+73,USR0065,diannaschmidtm0065,Dianna Schmidt MD,Bolivia,Gastronomía,8,56,0.125,55.123266563944526,Alto,0.966
+74,USR0129,drnedhills0129,Dr. Ned Hills,Bolivia,Tecnología,20,56,0.05,69.50693374422188,Alto,0.964
+75,USR0058,khadijahmcglyn0058,Khadijah McGlynn,Argentina,Educación,11,57,0.09090909090909091,60.23882896764252,Alto,0.964
+76,USR0591,ivorveumturner0591,Ivor Veum-Turner,Colombia,Tecnología,15,58,0.13333333333333333,71.64869029275809,Alto,0.962
+77,USR0346,francothiel0346,Franco Thiel,Bolivia,Deportes,17,50,0.11764705882352941,67.0724191063174,Alto,0.962
+78,USR0116,ayeshawolf0116,Ayesha Wolf,Bolivia,Moda,11,64,0.09090909090909091,65.16178736517719,Alto,0.958
+79,USR0341,mrleifschroede0341,Mr. Leif Schroeder,Argentina,Gastronomía,14,51,0.07142857142857142,58.9060092449923,Alto,0.958
+80,USR0287,eleanoreturner0287,Eleanore Turner MD,Colombia,Moda,11,52,0.09090909090909091,55.45454545454545,Alto,0.958
+81,USR0269,missaudriannar0269,Miss Audrianna Runolfsson,Bolivia,Educación,21,53,0.09523809523809523,72.31895223420646,Alto,0.956
+82,USR0619,arjunschaden0619,Arjun Schaden,Bolivia,Tecnología,12,64,0.08333333333333333,66.96456086286594,Alto,0.956
+83,USR0641,josefinapaucek0641,Josefina Paucek,Bolivia,Deportes,16,55,0.0625,65.0693374422188,Alto,0.956
+84,USR0451,sophiahuelsdan0451,Sophia Huels-Daniel,Bolivia,Educación,14,56,0.07142857142857142,63.41294298921417,Alto,0.956
+85,USR0112,zadieleannon0112,Zadie Leannon,Bolivia,Viajes,15,48,0.13333333333333333,62.21879815100154,Alto,0.956
+86,USR0400,johnieheathcot0400,Johnie Heathcote,Bolivia,Moda,14,47,0.07142857142857142,55.1617873651772,Alto,0.956
+87,USR0144,meghannhilpert0144,Meghann Hilpert,Colombia,Moda,19,58,0.05263157894736842,71.07858243451463,Alto,0.954
+88,USR0213,barnardheidenr0213,Barnard Heidenreich,Perú,Viajes,17,58,0.058823529411764705,69.33744221879815,Alto,0.954
+89,USR0241,jessenianolan0241,Jessenia Nolan,Perú,Viajes,19,55,0.05263157894736842,68.30508474576271,Alto,0.954
+90,USR0231,mrmohamedgisla0231,Mr. Mohamed Gislason II,Bolivia,Educación,15,53,0.06666666666666667,62.26502311248075,Alto,0.954
+91,USR0161,yettawolff0161,Yetta Wolff,Bolivia,Moda,12,55,0.08333333333333333,59.96147919876733,Alto,0.954
+92,USR0573,drbartbalistre0573,Dr. Bart Balistreri,Bolivia,Tecnología,15,50,0.06666666666666667,59.21417565485362,Alto,0.954
+93,USR0268,jaycobberge0268,Jaycob Berge,Chile,Deportes,14,64,0.14285714285714285,73.9753466872111,Alto,0.952
+94,USR0204,paigeleannon0204,Paige Leannon,Perú,Tecnología,14,60,0.07142857142857142,66.87981510015408,Alto,0.952
+95,USR0137,pollydonnelly0137,Polly Donnelly,Bolivia,Gastronomía,11,62,0.18181818181818182,66.73343605546995,Alto,0.952
+96,USR0054,misscarleymetz0054,Miss Carley Metz DDS,Bolivia,Deportes,24,47,0.08333333333333333,66.24036979969183,Alto,0.952
+97,USR0049,kendalroberts0049,Kendal Roberts,Bolivia,Deportes,14,50,0.14285714285714285,62.118644067796616,Alto,0.952
+98,USR0371,mrssydnimckenz0371,Mrs. Sydni McKenzie DDS,Perú,Tecnología,11,51,0.09090909090909091,54.622496147919875,Alto,0.952
+99,USR0083,omapacochaphd0083,Oma Pacocha PhD,Chile,Gastronomía,8,52,0.25,52.973805855161785,Alto,0.95
+100,USR0353,symonekonopels0353,Symone Konopelski-Koch,Perú,Educación,9,47,0.2222222222222222,49.69183359013867,Medio,0.95
+101,USR0159,saveriorenner0159,Saverio Renner,Bolivia,Educación,15,55,0.2,69.89214175654854,Alto,0.948
+102,USR0154,luisharris0154,Luis Harris,Perú,Moda,16,57,0.0625,67.14946070878274,Alto,0.948
+103,USR0243,mrsmichellezie0243,Mrs. Michelle Zieme,Bolivia,Educación,12,54,0.08333333333333333,59.337442218798145,Alto,0.948
+104,USR0164,dorthalittleph0164,Dortha Little PhD,Bolivia,Educación,13,59,0.07692307692307693,64.85362095531586,Alto,0.946
+105,USR0142,johnnywillms0142,Johnny Willms,Argentina,Deportes,15,48,0.06666666666666667,57.41140215716487,Alto,0.946
+106,USR0463,dollyleuschkee0463,Dolly Leuschke-Erdman,Bolivia,Moda,14,48,0.07142857142857142,55.785824345146374,Alto,0.946
+107,USR0523,jamienienow0523,Jamie Nienow,Colombia,Viajes,11,50,0.09090909090909091,53.30508474576271,Alto,0.946
+108,USR0358,kennardhueliii0358,Kennard Huel III,Argentina,Moda,11,62,0.09090909090909091,63.49768875192604,Alto,0.944
+109,USR0592,ruthedouglas0592,Ruthe Douglas,Bolivia,Gastronomía,14,48,0.07142857142857142,55.785824345146374,Alto,0.944
+110,USR0184,ewellbeahan0184,Ewell Beahan,Perú,Tecnología,16,57,0.0625,67.14946070878274,Alto,0.942
+111,USR0169,joihintz0169,Joi Hintz,Colombia,Gastronomía,12,61,0.08333333333333333,64.9537750385208,Alto,0.942
+112,USR0224,mohamedgaylord0224,Mohamed Gaylord DDS,Bolivia,Deportes,14,55,0.07142857142857142,62.442218798151,Alto,0.942
+113,USR0027,darcibashirian0027,Darci Bashirian-Murray,Bolivia,Deportes,10,62,0.1,62.134052388289675,Alto,0.942
+114,USR0427,cleavewestv0427,Cleave West V,Bolivia,Gastronomía,11,51,0.18181818181818182,57.858243451463785,Alto,0.942
+115,USR0512,genniehaagzeml0512,Gennie Haag-Zemlak,Bolivia,Tecnología,7,52,0.14285714285714285,50.593220338983045,Medio,0.942
+116,USR0214,alidahudson0214,Alida Hudson,Perú,Moda,17,63,0.11764705882352941,77.95839753466872,Alto,0.94
+117,USR0263,trevadach0263,Treva Dach,Perú,Gastronomía,13,53,0.07692307692307693,59.37596302003081,Alto,0.94
+118,USR0558,darrylbodeskil0558,Darryl Bode-Skiles,Colombia,Tecnología,23,48,0.08695652173913043,67.24961479198768,Alto,0.938
+119,USR0215,darrylesmitham0215,Darryle Smitham MD,Bolivia,Educación,23,54,0.043478260869565216,68.84437596302003,Alto,0.936
+120,USR0012,shaylaoreillyp0012,Shayla O'Reilly-Parker,Bolivia,Moda,17,54,0.058823529411764705,65.93990755007704,Alto,0.936
+121,USR0560,nolielemke0560,Nolie Lemke,Bolivia,Gastronomía,14,53,0.14285714285714285,65.16949152542372,Alto,0.936
+122,USR0211,franklintreute0211,Franklin Treutel,Argentina,Moda,11,54,0.09090909090909091,57.5346687211094,Alto,0.936
+123,USR0629,damionkuhic0629,Damion Kuhic,Colombia,Moda,10,52,0.1,54.090909090909086,Alto,0.936
+124,USR0173,tiffanybeerdvm0173,Tiffany Beer DVM,Chile,Moda,15,62,0.06666666666666667,69.40677966101696,Alto,0.934
+125,USR0088,dotjacobsgibso0088,Dot Jacobs-Gibson,Chile,Gastronomía,11,49,0.09090909090909091,52.68104776579352,Alto,0.934
+126,USR0066,edithbeattydds0066,Edith Beatty DDS,Bolivia,Educación,19,55,0.05263157894736842,68.30508474576271,Alto,0.93
+127,USR0080,clarkeondricka0080,Clarke Ondricka-Padberg,Bolivia,Moda,14,55,0.07142857142857142,62.442218798151,Alto,0.93
+128,USR0003,romainejacobis0003,Romaine Jacobi-Swaniawski,Argentina,Gastronomía,14,52,0.07142857142857142,59.73805855161787,Alto,0.93
+129,USR0578,madelinegreenh0578,Madeline Greenholt,Argentina,Deportes,10,56,0.1,57.76579352850539,Alto,0.92
+130,USR0625,valarieblanda0625,Valarie Blanda,Argentina,Gastronomía,13,49,0.07692307692307693,55.70107858243452,Alto,0.92
+131,USR0501,christeenbaumb0501,Christeen Baumbach,Chile,Tecnología,14,98,0,59.69183359013868,Alto,0.626
+132,USR0223,enricogreenfel0223,Enrico Greenfelder,Argentina,Tecnología,9,88,0,47.218798151001536,Medio,0.618
+133,USR0326,devanemard0326,Devan Emard,Chile,Deportes,12,81,0,51.52542372881356,Alto,0.612
+134,USR0235,rhodaauer0235,Rhoda Auer,Perú,Viajes,25,79,0,63.71340523882897,Alto,0.61
+135,USR0036,diandrarath0036,Diandra Rath,Chile,Educación,10,80,0,46.3251155624037,Medio,0.61
+136,USR0009,mrsdanicagleic0009,Mrs. Danica Gleichner,Bolivia,Educación,9,85,0,46.10939907550077,Medio,0.61
+137,USR0250,mrsronahudsonm0250,Mrs. Rona Hudson MD,Chile,Deportes,19,83,0,64.53775038520801,Alto,0.606
+138,USR0077,danielblick0077,Daniel Blick,Bolivia,Viajes,22,74,0,59.99229583975346,Alto,0.606
+139,USR0374,maynardwalter0374,Maynard Walter,Chile,Tecnología,5,73,0,35.46224961479199,Medio,0.606
+140,USR0130,roninfeestreic0130,Ronin Feest-Reichert,Colombia,Educación,18,74,0,57.68104776579352,Alto,0.604
+141,USR0466,caleighcorwinp0466,Caleigh Corwin PhD,Chile,Viajes,12,84,0,52.91217257318952,Alto,0.604
+142,USR0636,keshiaabshire0636,Keshia Abshire,Colombia,Deportes,7,65,0,32.01078582434515,Medio,0.604
+143,USR0478,lyndseydarenol0478,Lyndsey Dare-Nolan,Bolivia,Viajes,22,69,0,57.56548536209554,Alto,0.602
+144,USR0401,elderwalshdamo0401,Elder Walsh-D'Amore,Bolivia,Viajes,12,66,0,42.23420647149461,Medio,0.602
+145,USR0293,arianapollich0293,Ariana Pollich,Perú,Educación,18,90,0,65.86286594761171,Alto,0.6
+146,USR0461,dallasschuppem0461,Dallas Schuppe-Mitchell,Bolivia,Tecnología,18,78,0,60.45454545454545,Alto,0.6
+147,USR0071,embersteuber0071,Ember Steuber,Bolivia,Educación,14,88,0,58.23574730354392,Alto,0.6
+148,USR0618,drlucamiller0618,Dr. Luca Miller,Bolivia,Deportes,14,85,0,57.12634822804314,Alto,0.6
+149,USR0111,katerinadenesi0111,Katerina Denesik,Argentina,Viajes,15,79,0,56.047765793528505,Alto,0.6
+150,USR0624,drewmurrayflat0624,Drew Murray-Flatley,Perú,Viajes,16,71,0,53.374422187981516,Alto,0.6
+151,USR0414,mrdessiekuvali0414,Mr. Dessie Kuvalis II,Chile,Tecnología,16,70,0,52.889060092449924,Alto,0.6
+152,USR0317,stanfordharris0317,Stanford Harris-D'Amore,Bolivia,Deportes,15,66,0,48.281972265023114,Medio,0.6
+153,USR0023,drdaviangoyett0023,Dr. Davian Goyette III,Argentina,Viajes,8,65,0,33.281972265023114,Medio,0.6
+154,USR0444,marcellagoyett0444,Marcella Goyette,Chile,Viajes,16,85,0,60.86286594761171,Alto,0.598
+155,USR0199,oziekerluke0199,Ozie Kerluke,Bolivia,Tecnología,15,82,0,57.98921417565486,Alto,0.598
+156,USR0363,misslethiakuph0363,Miss Lethia Kuphal,Chile,Educación,17,76,0,57.71186440677967,Alto,0.596
+157,USR0391,marjorybernier0391,Marjory Bernier,Argentina,Tecnología,14,77,0,52.688751926040055,Alto,0.596
+158,USR0497,myrtlelehner0497,Myrtle Lehner,Chile,Tecnología,14,76,0,52.20338983050847,Alto,0.596
+159,USR0279,violetteconn0279,Violette Conn,Perú,Educación,15,70,0,51.19414483821263,Medio,0.596
+160,USR0487,calebrussel0487,Caleb Russel,Perú,Moda,5,80,0,39.96918335901387,Medio,0.596
+161,USR0304,milburngreendv0304,Milburn Green DVM,Perú,Viajes,17,67,0,52.85824345146379,Alto,0.594
+162,USR0456,winterkuphalmi0456,Winter Kuphal-Miller,Perú,Tecnología,20,92,0,67.70416024653314,Alto,0.592
+163,USR0086,dralethaherman0086,Dr. Aletha Herman MD,Bolivia,Tecnología,24,80,0,64.39137134052389,Alto,0.592
+164,USR0104,adelardwyman0104,Adelard Wyman,Bolivia,Viajes,20,75,0,59.79969183359013,Alto,0.592
+165,USR0557,breannjerdemd0557,Breann Jerde MD,Bolivia,Tecnología,15,82,0,57.98921417565486,Alto,0.592
+166,USR0039,leroywolf0039,Leroy Wolf,Bolivia,Moda,14,80,0,54.8382126348228,Alto,0.592
+167,USR0007,antionesteuber0007,Antione Steuber,Bolivia,Tecnología,12,69,0,44.314329738058554,Medio,0.592
+168,USR0633,drelmyrajohnso0633,Dr. Elmyra Johnson,Bolivia,Viajes,14,86,0,57.473035439137135,Alto,0.59
+169,USR0016,mserlenebechte0016,Ms. Erlene Bechtelar MD,Chile,Tecnología,17,74,0,56.2557781201849,Alto,0.59
+170,USR0403,sharlaabernath0403,Sharla Abernathy-Runolfsson,Argentina,Viajes,21,66,0,55.100154083204934,Alto,0.59
+171,USR0296,hamptonzemlak0296,Hampton Zemlak,Bolivia,Gastronomía,14,74,0,50.747303543913716,Medio,0.59
+172,USR0084,missnereidahea0084,Miss Nereida Heathcote DVM,Bolivia,Educación,12,79,0,50,Medio,0.59
+173,USR0485,carycruickshan0485,Cary Cruickshank MD,Bolivia,Deportes,11,81,0,49.21417565485362,Medio,0.59
+174,USR0417,drplumasanford0417,Dr. Pluma Sanford,Colombia,Educación,9,66,0,35.22342064714946,Medio,0.59
+175,USR0508,stevieemarddds0508,Stevie Emard DDS,Argentina,Tecnología,13,105,0,57.80431432973806,Alto,0.588
+176,USR0015,hollisraui0015,Hollis Rau I,Perú,Tecnología,15,79,0,56.047765793528505,Alto,0.588
+177,USR0332,tisadicki0332,Tisa Dicki,Bolivia,Moda,10,82,0,47.43451463790447,Medio,0.588
+178,USR0222,silvesterdoole0222,Silvester Dooley,Bolivia,Deportes,13,67,0,45.11556240369799,Medio,0.588
+179,USR0405,misssilviamaye0405,Miss Silvia Mayert,Chile,Viajes,12,67,0,43.34360554699538,Medio,0.588
+180,USR0219,teaokon0219,Tea O'Kon,Bolivia,Deportes,16,78,0,57.2573189522342,Alto,0.586
+181,USR0630,drorahkihnmd0630,Dr. Orah Kihn MD,Argentina,Deportes,16,75,0,55.177195685670256,Alto,0.586
+182,USR0642,saritacrooks0642,Sarita Crooks,Argentina,Tecnología,4,72,0,35.0231124807396,Medio,0.586
+183,USR0631,kennethhartman0631,Kenneth Hartmann,Argentina,Tecnología,21,78,0,62.38058551617873,Alto,0.584
+184,USR0099,tobewaelchi0099,Tobe Waelchi,Bolivia,Moda,16,78,0,57.2573189522342,Alto,0.584
+185,USR0052,mikaldamore0052,Mikal D'Amore,Chile,Tecnología,13,80,0,52.6040061633282,Alto,0.584
+186,USR0113,minorbartell0113,Minor Bartell,Colombia,Educación,15,69,0,50.36209553158706,Medio,0.584
+187,USR0520,drbetteziemann0520,Dr. Bette Ziemann PhD,Argentina,Deportes,10,83,0,48.12788906009246,Medio,0.584
+188,USR0029,hayleewyman0029,Haylee Wyman,Colombia,Deportes,12,75,0,47.43451463790447,Medio,0.584
+189,USR0479,drtolliemoscis0479,Dr. Tollie Mosciski III,Bolivia,Moda,10,79,0,45.49306625577812,Medio,0.584
+190,USR0649,dellabednar0649,Della Bednar,Perú,Educación,18,90,0,65.86286594761171,Alto,0.582
+191,USR0069,msjannettefade0069,Ms. Jannette Fadel PhD,Perú,Educación,11,106,0,53.8597842835131,Alto,0.582
+192,USR0377,vandernitzsche0377,Vander Nitzsche DVM,Chile,Viajes,12,86,0,53.46687211093991,Alto,0.582
+193,USR0149,neliajacobi0149,Nelia Jacobi,Bolivia,Tecnología,11,84,0,50.600924499229585,Medio,0.582
+194,USR0257,kendellheidenr0257,Kendell Heidenreich,Argentina,Educación,18,70,0,56.08628659476117,Alto,0.58
+195,USR0348,enolaroberts0348,Enola Roberts,Perú,Moda,14,71,0,49.63790446841294,Medio,0.58
+196,USR0569,hannacruicksha0569,Hanna Cruickshank,Bolivia,Moda,11,77,0,46.3713405238829,Medio,0.58
+197,USR0394,jackbinsdds0394,Jack Bins DDS,Argentina,Educación,9,74,0,39.730354391371336,Medio,0.58
+198,USR0276,cynthapfanners0276,Cyntha Pfannerstill,Bolivia,Tecnología,8,73,0,37.92758089368259,Medio,0.58
+199,USR0196,shaynamante0196,Shayna Mante,Bolivia,Gastronomía,6,74,0,36.37904468412943,Medio,0.58
+200,USR0482,dayanakozey0482,Dayana Kozey,Argentina,Educación,13,90,0,56.69491525423729,Alto,0.578
+201,USR0321,lavernasmith0321,Laverna Smith,Argentina,Deportes,17,88,0,63.7442218798151,Alto,0.576
+202,USR0146,siewuckert0146,Sie Wuckert,Colombia,Tecnología,19,66,0,54.13713405238829,Alto,0.576
+203,USR0028,drgermanpaucek0028,Dr. German Paucek,Perú,Gastronomía,13,79,0,51.771956856702616,Alto,0.576
+204,USR0300,missmirandasan0300,Miss Miranda Sanford MD,Argentina,Educación,15,68,0,50.01540832049307,Medio,0.576
+205,USR0167,dalefadel0167,Dale Fadel,Argentina,Viajes,12,77,0,48.68258859784284,Medio,0.576
+206,USR0390,garlandhauck0390,Garland Hauck,Bolivia,Viajes,12,67,0,43.34360554699538,Medio,0.576
+207,USR0275,brodericklockm0275,Broderick Lockman,Perú,Gastronomía,10,67,0,38.836671802773495,Medio,0.576
+208,USR0535,emrystoltenber0535,Emry Stoltenberg,Colombia,Viajes,21,73,0,59.19106317411402,Alto,0.574
+209,USR0238,ashantishanaha0238,Ashanti Shanahan,Bolivia,Tecnología,13,82,0,53.71340523882897,Alto,0.574
+210,USR0311,harriettekreig0311,Harriette Kreiger-Bernier,Colombia,Deportes,14,66,0,46.24036979969184,Medio,0.574
+211,USR0131,msdoraschmeler0131,Ms. Dora Schmeler,Argentina,Moda,25,78,0,63.22804314329738,Alto,0.572
+212,USR0412,arianelubowitz0412,Ariane Lubowitz,Colombia,Educación,18,82,0,62.881355932203384,Alto,0.572
+213,USR0464,windellankundi0464,Windell Ankunding,Chile,Viajes,18,79,0,60.93990755007703,Alto,0.572
+214,USR0339,zariavandervor0339,Zaria Vandervort,Bolivia,Deportes,18,71,0,56.57164869029276,Alto,0.572
+215,USR0338,lawyersanfordm0338,Lawyer Sanford MD,Bolivia,Deportes,14,81,0,55.53158705701079,Alto,0.572
+216,USR0345,msophalebsack0345,Ms. Opha Lebsack,Argentina,Educación,15,77,0,54.730354391371336,Alto,0.572
+217,USR0581,janaycasper0581,Janay Casper,Perú,Deportes,16,66,0,49.9768875192604,Medio,0.572
+218,USR0337,misstishieauer0337,Miss Tishie Auer DVM,Perú,Viajes,8,75,0,39.036979969183356,Medio,0.572
+219,USR0540,akeelahbuckrid0540,Akeelah Buckridge-Hintz,Chile,Gastronomía,17,68,0,53.48228043143297,Alto,0.57
+220,USR0372,missraelynnpre0372,Miss Raelynn Predovic,Bolivia,Moda,15,69,0,50.36209553158706,Medio,0.57
+221,USR0473,kuntakunze0473,Kunta Kunze,Argentina,Gastronomía,9,65,0,34.66872110939907,Medio,0.57
+222,USR0190,carlostorp0190,Carlos Torp,Bolivia,Deportes,17,99,0,65.26964560862865,Alto,0.568
+223,USR0432,dariondietrich0432,Darion Dietrich,Argentina,Moda,13,88,0,56.001540832049315,Alto,0.568
+224,USR0082,tatiahane0082,Tatia Hane,Bolivia,Tecnología,6,93,0,45.115562403698,Medio,0.568
+225,USR0572,drbrendonmaggi0572,Dr. Brendon Maggio Sr.,Argentina,Gastronomía,17,81,0,61.04006163328197,Alto,0.566
+226,USR0299,anicebatz0299,Anice Batz,Colombia,Viajes,11,75,0,45.12326656394453,Medio,0.566
+227,USR0170,glendafahey0170,Glenda Fahey,Colombia,Moda,13,85,0,54.892141756548526,Alto,0.564
+228,USR0273,riyaosinski0273,Riya Osinski,Bolivia,Educación,15,73,0,52.37288135593221,Alto,0.564
+229,USR0122,orlinnienowdib0122,Orlin Nienow-Dibbert,Chile,Gastronomía,15,66,0,48.281972265023114,Medio,0.564
+230,USR0335,leslieschimmel0335,Leslie Schimmel,Perú,Gastronomía,17,76,0,57.71186440677967,Alto,0.562
+231,USR0580,jobehahn0580,Jobe Hahn,Bolivia,Viajes,15,80,0,56.87981510015408,Alto,0.562
+232,USR0078,colonwitting0078,Colon Witting,Colombia,Deportes,13,81,0,53.29738058551619,Alto,0.562
+233,USR0547,jonpouros0547,Jon Pouros,Bolivia,Moda,20,77,0,61.047765793528505,Alto,0.56
+234,USR0200,verlinkemmerzi0200,Verlin Kemmer-Ziemann,Chile,Gastronomía,18,67,0,54.28351309707242,Alto,0.56
+235,USR0342,misssigridgayl0342,Miss Sigrid Gaylord,Argentina,Viajes,12,88,0,54.229583975346685,Alto,0.56
+236,USR0398,alvyankundingg0398,Alvy Ankunding-Graham,Bolivia,Moda,17,69,0,53.82896764252697,Alto,0.56
+237,USR0448,rubinhudsondvm0448,Rubin Hudson DVM,Bolivia,Viajes,14,74,0,50.747303543913716,Medio,0.56
+238,USR0483,matiasgrady0483,Matias Grady,Bolivia,Viajes,5,88,0,43.36671802773498,Medio,0.56
+239,USR0118,arriehaley0118,Arrie Haley,Perú,Deportes,16,80,0,58.57473035439138,Alto,0.558
+240,USR0635,julisablock0635,Julisa Block,Perú,Moda,16,65,0,49.42218798151002,Medio,0.558
+241,USR0026,mrcornellswift0026,Mr. Cornell Swift Sr.,Chile,Deportes,15,76,0,54.24499229583976,Alto,0.554
+242,USR0575,stacyhudson0575,Stacy Hudson,Bolivia,Deportes,16,73,0,54.067796610169495,Alto,0.554
+243,USR0411,blanchiecarter0411,Blanchie Carter,Bolivia,Moda,14,90,0,58.92912172573189,Alto,0.552
+244,USR0597,leandrogrimes0597,Leandro Grimes,Argentina,Tecnología,11,87,0,51.502311248073966,Alto,0.552
+245,USR0109,nolaborer0109,Nola Borer,Bolivia,Educación,11,65,0,39.36825885978429,Medio,0.552
+246,USR0356,louannahilll0356,Louanna Hilll,Perú,Gastronomía,21,76,0,61.06317411402158,Alto,0.55
+247,USR0606,jordonbatz0606,Jordon Batz,Bolivia,Viajes,14,82,0,55.94761171032358,Alto,0.55
+248,USR0648,glennschmeler0648,Glenn Schmeler,Bolivia,Gastronomía,10,79,0,45.49306625577812,Medio,0.55
+249,USR0566,mrelishahirthe0566,Mr. Elisha Hirthe III,Bolivia,Tecnología,12,68,0,43.96764252696456,Medio,0.55
+250,USR0114,aubreelemke0114,Aubree Lemke,Chile,Moda,11,69,0,42.003081664098616,Medio,0.55
+251,USR0160,dewardconnv0160,Deward Conn V,Perú,Moda,5,82,0,41.078582434514644,Medio,0.55
+252,USR0328,drlakeshanolan0328,Dr. Lakesha Nolan PhD,Bolivia,Tecnología,8,75,0,39.036979969183356,Medio,0.55
+253,USR0505,ivysauercormie0505,Ivy Sauer-Cormier,Perú,Gastronomía,20,77,0,61.047765793528505,Alto,0.548
+254,USR0498,drneryweissnat0498,Dr. Nery Weissnat DDS,Chile,Educación,13,74,0,48.5130970724191,Medio,0.548
+255,USR0521,rindalittlemd0521,Rinda Little MD,Chile,Gastronomía,7,71,0,35.963020030816644,Medio,0.548
+256,USR0354,nolieswaniawsk0354,Nolie Swaniawski DDS,Bolivia,Moda,8,77,0,40.28505392912172,Medio,0.544
+257,USR0454,drsteviecollin0454,Dr. Stevie Collins PhD,Bolivia,Educación,17,82,0,61.45608628659477,Alto,0.54
+258,USR0178,missdanitaripp0178,Miss Danita Rippin MD,Argentina,Viajes,10,66,0,37.727272727272734,Medio,0.54
+259,USR0576,missjanellefee0576,Miss Janelle Feest,Colombia,Deportes,14,101,0,59.96918335901387,Alto,0.538
+260,USR0295,drleticiaconsi0295,Dr. Leticia Considine MD,Colombia,Viajes,13,86,0,55.238828967642526,Alto,0.538
+261,USR0285,msmandihilpert0285,Ms. Mandi Hilpert,Chile,Gastronomía,8,78,0,41.1171032357473,Medio,0.538
+262,USR0096,mrmillergottli0096,Mr. Miller Gottlieb II,Bolivia,Gastronomía,6,66,0,31.872110939907554,Medio,0.538
+263,USR0152,mrvolneyterry0152,Mr. Volney Terry,Bolivia,Moda,16,91,0,63.01232665639445,Alto,0.532
+264,USR0151,sharynfriesen0151,Sharyn Friesen,Colombia,Gastronomía,17,66,0,51.748844375963024,Alto,0.53
+265,USR0585,cassondracormi0585,Cassondra Cormier,Bolivia,Gastronomía,7,99,0,46.08628659476117,Medio,0.53
+266,USR0425,laurencemclaug0425,Laurence McLaughlin,Chile,Viajes,17,69,0,53.82896764252697,Alto,0.526
+267,USR0261,mikailacremin0261,Mikaila Cremin,Bolivia,Viajes,15,73,0,52.37288135593221,Alto,0.526
+268,USR0611,dondretromp0611,Dondre Tromp,Bolivia,Viajes,13,69,0,46.08628659476117,Medio,0.526
+269,USR0650,adrienlabadie0650,Adrien Labadie,Argentina,Educación,16,66,0,49.9768875192604,Medio,0.524
+270,USR0254,melissabuckrid0254,Melissa Buckridge,Bolivia,Viajes,20,95,0,67.98151001540832,Alto,0.512
+271,USR0234,wintonbartolet0234,Winton Bartoletti,Colombia,Moda,11,46,0.09090909090909091,49.976887519260394,Medio,0.16
+272,USR0232,andrialindgren0232,Andria Lindgren DDS,Chile,Gastronomía,9,44,0.1111111111111111,45.184899845916796,Medio,0.16
+273,USR0134,jedediahmurray0134,Jedediah Murray,Bolivia,Deportes,9,21,0.1111111111111111,33.12018489984592,Medio,0.152
+274,USR0381,mrsilenecronin0381,Mrs. Ilene Cronin,Chile,Educación,13,41,0.07692307692307693,49.18335901386749,Medio,0.15
+275,USR0076,carlylefeest0076,Carlyle Feest,Colombia,Educación,6,19,0.16666666666666666,30.80893682588598,Medio,0.148
+276,USR0511,kittybeckerrun0511,Kitty Becker-Runte,Colombia,Tecnología,6,10,0.16666666666666666,30.115562403698,Medio,0.148
+277,USR0240,mrslaurynsimon0240,Mrs. Lauryn Simonis,Bolivia,Gastronomía,16,46,0.0625,56.88751926040061,Alto,0.146
+278,USR0061,jerrellstokesk0061,Jerrell Stokes-Kris,Colombia,Educación,13,42,0.07692307692307693,50.22342064714947,Medio,0.146
+279,USR0433,mrjarrodmcclur0433,Mr. Jarrod McClure MD,Bolivia,Moda,11,36,0.09090909090909091,42.6271186440678,Medio,0.144
+280,USR0115,tatianamcclure0115,Tatiana McClure,Colombia,Moda,10,32,0.1,38.97534668721109,Medio,0.144
+281,USR0221,carmelkirlin0221,Carmel Kirlin,Chile,Educación,6,36,0.16666666666666666,37.5346687211094,Medio,0.142
+282,USR0605,rashaadbode0605,Rashaad Bode,Argentina,Tecnología,13,32,0.15384615384615385,47.28813559322034,Medio,0.14
+283,USR0172,daralesch0172,Dara Lesch,Bolivia,Gastronomía,7,43,0.14285714285714285,43.035439137134055,Medio,0.14
+284,USR0600,teddiebuckridg0600,Teddie Buckridge,Argentina,Tecnología,10,17,0.3,37.080123266563945,Medio,0.14
+285,USR0570,drtroyblock0570,Dr. Troy Block,Chile,Educación,9,29,0.1111111111111111,35.33898305084746,Medio,0.14
+286,USR0524,hardenvonruede0524,Harden VonRueden-Frami,Bolivia,Deportes,9,35,0.1111111111111111,38.52850539291217,Medio,0.138
+287,USR0369,missolivametzd0369,Miss Oliva Metz DVM,Chile,Viajes,14,29,0.07142857142857142,43.02773497688752,Medio,0.136
+288,USR0610,lettyzemlakwei0610,Letty Zemlak-Weimann,Bolivia,Educación,5,27,0.2,33.01232665639446,Medio,0.136
+289,USR0477,infanttorphy0477,Infant Torphy,Chile,Tecnología,17,29,0.058823529411764705,47.14946070878274,Medio,0.134
+290,USR0135,phyliciaswifts0135,Phylicia Swift-Shanahan,Bolivia,Educación,9,45,0.1111111111111111,45.94761171032358,Medio,0.134
+291,USR0496,droranhomenick0496,Dr. Oran Homenick DVM,Bolivia,Gastronomía,11,40,0.09090909090909091,45.33127889060092,Medio,0.134
+292,USR0602,lennabernier0602,Lenna Bernier,Bolivia,Educación,7,25,0.14285714285714285,32.704160246533135,Medio,0.134
+293,USR0475,kishaschadentr0475,Kisha Schaden-Tremblay,Perú,Viajes,17,44,0.11764705882352941,62.357473035439135,Alto,0.132
+294,USR0230,pryorlittlecum0230,Pryor Little-Cummings,Chile,Deportes,14,20,0.07142857142857142,40.462249614791986,Medio,0.132
+295,USR0062,hilaryokuneva0062,Hilary Okuneva,Bolivia,Deportes,11,31,0.09090909090909091,39.99229583975347,Medio,0.132
+296,USR0117,gabrielheidenr0117,Gabriel Heidenreich,Perú,Moda,12,45,0.08333333333333333,51.155624036979965,Medio,0.13
+297,USR0284,clotildapriceb0284,Clotilda Price-Bauch,Argentina,Tecnología,6,10,0.16666666666666666,30.115562403698,Medio,0.13
+298,USR0198,parleyhodkiewi0198,Parley Hodkiewicz,Chile,Gastronomía,9,24,0.1111111111111111,33.8828967642527,Medio,0.126
+299,USR0593,quentinshields0593,Quentin Shields III,Bolivia,Moda,14,38,0.07142857142857142,48.366718027734976,Medio,0.124
+300,USR0546,kiyoshistiedem0546,Kiyoshi Stiedemann,Perú,Moda,14,36,0.07142857142857142,46.91063174114021,Medio,0.124
+301,USR0305,mrsbriannaharb0305,Mrs. Brianna Harber,Bolivia,Deportes,8,45,0.125,45.346687211093986,Medio,0.122
+302,USR0157,mansonvandervo0157,Manson Vandervort,Perú,Moda,5,25,0.2,32.38828967642527,Medio,0.122
+303,USR0315,erasmusbayer0315,Erasmus Bayer,Bolivia,Gastronomía,14,45,0.07142857142857142,53.63636363636364,Alto,0.12
+304,USR0526,veragislason0526,Vera Gislason,Argentina,Gastronomía,16,29,0.125,50.878274268104775,Medio,0.12
+305,USR0141,ameliekonopels0141,Amelie Konopelski,Perú,Deportes,10,45,0.1,47.98921417565485,Medio,0.12
+306,USR0459,misslyndiawiso0459,Miss Lyndia Wisozk MD,Colombia,Viajes,9,46,0.1111111111111111,46.571648690292754,Medio,0.12
+307,USR0247,maebellemayert0247,Maebelle Mayert,Bolivia,Moda,8,43,0.125,43.890600924499225,Medio,0.12
+308,USR0256,luigiziemann0256,Luigi Ziemann,Chile,Gastronomía,9,41,0.1111111111111111,42.75808936825886,Medio,0.12
+309,USR0426,brisawelch0426,Brisa Welch,Colombia,Viajes,18,44,0.1111111111111111,63.13559322033898,Alto,0.118
+310,USR0055,mrwaverlycrook0055,Mr. Waverly Crooks,Perú,Educación,11,45,0.18181818181818182,52.58859784283513,Alto,0.116
+311,USR0507,lemonvandervor0507,Lemon Vandervort,Bolivia,Educación,14,40,0.07142857142857142,49.61479198767334,Medio,0.116
+312,USR0393,generaltorphy0393,General Torphy,Argentina,Educación,18,42,0.05555555555555555,56.710323574730346,Alto,0.114
+313,USR0465,mrsmalvinaullr0465,Mrs. Malvina Ullrich,Bolivia,Educación,12,38,0.08333333333333333,45.88597842835131,Medio,0.114
+314,USR0051,eloisebradtke0051,Eloise Bradtke,Bolivia,Moda,9,32,0.2222222222222222,39.152542372881356,Medio,0.114
+315,USR0531,gayconnphd0531,Gay Conn PhD,Bolivia,Educación,8,23,0.125,32.93528505392912,Medio,0.114
+316,USR0264,ariellesipes0264,Arielle Sipes,Perú,Gastronomía,8,39,0.125,40.631741140215716,Medio,0.112
+317,USR0421,marryjacobs0421,Marry Jacobs,Bolivia,Educación,7,36,0.14285714285714285,37.76579352850539,Medio,0.112
+318,USR0050,marshritchie0050,Marsh Ritchie,Colombia,Moda,9,38,0.1111111111111111,40.67796610169492,Medio,0.106
+319,USR0220,yvetteleuschke0220,Yvette Leuschke-Balistreri,Perú,Deportes,21,57,0,49.06779661016949,Medio,0.034
+320,USR0384,alvarosatterfi0384,Alvaro Satterfield,Bolivia,Deportes,16,60,0,46.3020030816641,Medio,0.034
+321,USR0272,mickiehegmann0272,Mickie Hegmann,Bolivia,Viajes,13,58,0,38.66718027734977,Medio,0.03
+322,USR0042,teddiehammes0042,Teddie Hammes,Bolivia,Viajes,17,48,0,36.97996918335902,Medio,0.028
+323,USR0595,jarredrunolfsd0595,Jarred Runolfsdottir,Perú,Viajes,12,50,0,29.26810477657935,Medio,0.028
+324,USR0402,eloyschuppe0402,Eloy Schuppe,Argentina,Gastronomía,13,57,0,37.973805855161785,Medio,0.026
+325,USR0089,maxielabadie0089,Maxie Labadie,Bolivia,Educación,12,57,0,36.20184899845917,Medio,0.026
+326,USR0436,msluciafeeney0436,Ms. Lucia Feeney,Argentina,Tecnología,11,59,0,35.48536209553159,Medio,0.026
+327,USR0495,rashaanrunolfs0495,Rashaan Runolfsdottir,Colombia,Educación,9,64,0,34.11402157164869,Medio,0.026
+328,USR0493,wallacegoodwin0493,Wallace Goodwin,Bolivia,Educación,10,52,0,26.910631741140218,Bajo,0.026
+329,USR0094,mervynpfeffer0094,Mervyn Pfeffer,Argentina,Tecnología,21,63,0,53.02003081664098,Alto,0.024
+330,USR0471,mrerniehills0471,Mr. Ernie Hills,Perú,Educación,16,64,0,48.86748844375963,Medio,0.024
+331,USR0577,fullersauer0577,Fuller Sauer,Bolivia,Viajes,20,48,0,39.83050847457627,Medio,0.024
+332,USR0040,carriesauer0040,Carrie Sauer,Argentina,Moda,10,59,0,33.28967642526965,Medio,0.024
+333,USR0277,tressiewolf0277,Tressie Wolf,Bolivia,Moda,10,59,0,33.28967642526965,Medio,0.024
+334,USR0601,gwenquitzon0601,Gwen Quitzon,Argentina,Deportes,10,51,0,26.078582434514637,Bajo,0.024
+335,USR0120,jeramieoconner0120,Jeramie O'Conner,Argentina,Viajes,7,53,0,22.650231124807398,Bajo,0.024
+336,USR0628,marcelinehoege0628,Marceline Hoeger DDS,Bolivia,Tecnología,9,49,0,21.633281972265024,Bajo,0.024
+337,USR0359,donavanboyerha0359,Donavan Boyer-Hane,Chile,Gastronomía,16,63,0,47.89676425269646,Medio,0.022
+338,USR0177,ansleydubuque0177,Ansley DuBuque,Bolivia,Deportes,15,59,0,43.844375963020035,Medio,0.022
+339,USR0249,brookconnellyd0249,Brook Connelly DVM,Perú,Gastronomía,15,56,0,41.14021571648691,Medio,0.022
+340,USR0378,kiyacarroll0378,Kiya Carroll,Colombia,Educación,16,49,0,36.38674884437596,Medio,0.022
+341,USR0329,ireneswaniawsk0329,Irene Swaniawski,Chile,Deportes,13,53,0,34.09090909090909,Medio,0.022
+342,USR0555,kandacedickins0555,Kandace Dickinson PhD,Bolivia,Gastronomía,13,50,0,31.04006163328197,Medio,0.022
+343,USR0155,drmichellemcke0155,Dr. Michelle McKenzie,Perú,Moda,14,47,0,30.847457627118647,Medio,0.022
+344,USR0024,mslisarutherfo0024,Ms. Lisa Rutherford MD,Chile,Gastronomía,8,58,0,28.49768875192604,Bajo,0.022
+345,USR0537,drjulegradymd0537,Dr. Jule Grady MD,Argentina,Gastronomía,10,53,0,27.81201848998459,Bajo,0.022
+346,USR0239,harrisonbailey0239,Harrison Bailey,Chile,Gastronomía,24,53,0,45.87827426810478,Medio,0.02
+347,USR0242,estrellareiche0242,Estrella Reichert,Bolivia,Moda,13,62,0,41.2326656394453,Medio,0.02
+348,USR0110,bufordlindgren0110,Buford Lindgren,Chile,Tecnología,14,57,0,40.208012326656394,Medio,0.02
+349,USR0452,rainakochjerde0452,Raina Koch-Jerde,Argentina,Gastronomía,12,61,0,39.11402157164869,Medio,0.02
+350,USR0608,dredmonkunze0608,Dr. Edmon Kunze,Bolivia,Gastronomía,15,52,0,37.4653312788906,Medio,0.02
+351,USR0457,yehudakonopels0457,Yehuda Konopelski,Bolivia,Viajes,12,53,0,32.31895223420647,Medio,0.02
+352,USR0226,rancejakubowsk0226,Rance Jakubowski,Perú,Gastronomía,12,51,0,30.585516178736516,Medio,0.02
+353,USR0638,arianatremblay0638,Ariana Tremblay,Chile,Viajes,11,53,0,30.007704160246533,Medio,0.02
+354,USR0322,liamcummings0322,Liam Cummings,Chile,Gastronomía,12,47,0,26.84129429892142,Bajo,0.02
+355,USR0294,mrdelmathompso0294,Mr. Delma Thompson,Chile,Tecnología,10,51,0,26.078582434514637,Bajo,0.02
+356,USR0474,merilynhackett0474,Merilyn Hackett,Chile,Tecnología,10,51,0,26.078582434514637,Bajo,0.02
+357,USR0627,mrsmarybethgri0627,Mrs. Marybeth Grimes,Perú,Viajes,5,56,0,24.229583975346685,Bajo,0.02
+358,USR0124,tyreemaggio0124,Tyree Maggio,Bolivia,Viajes,9,51,0,23.57473035439137,Bajo,0.02
+359,USR0484,orlandopredovi0484,Orlando Predovic,Argentina,Viajes,7,53,0,22.650231124807398,Bajo,0.02
+360,USR0549,joaniefadel0549,Joanie Fadel,Bolivia,Deportes,18,63,0,51.0939907550077,Medio,0.018
+361,USR0126,foywitting0126,Foy Witting,Bolivia,Educación,17,64,0,50.63944530046225,Medio,0.018
+362,USR0260,daxmorissette0260,Dax Morissette,Bolivia,Gastronomía,16,63,0,47.89676425269646,Medio,0.018
+363,USR0494,audleyhermisto0494,Audley Hermiston II,Argentina,Viajes,17,55,0,43.63636363636364,Medio,0.018
+364,USR0248,drmalissieleff0248,Dr. Malissie Leffler,Bolivia,Educación,13,63,0,41.92604006163328,Medio,0.018
+365,USR0551,drjoslynreiche0551,Dr. Joslyn Reichert MD,Colombia,Tecnología,17,53,0,41.833590138674886,Medio,0.018
+366,USR0059,sadyegorczany0059,Sadye Gorczany,Bolivia,Gastronomía,18,51,0,41.52542372881356,Medio,0.018
+367,USR0153,drtobytorpii0153,Dr. Toby Torp II,Chile,Educación,18,50,0,40.208012326656394,Medio,0.018
+368,USR0445,deeganbailey0445,Deegan Bailey,Perú,Tecnología,12,63,0,40.154083204930664,Medio,0.018
+369,USR0193,nealytownedvm0193,Nealy Towne DVM,Perú,Viajes,12,61,0,39.11402157164869,Medio,0.018
+370,USR0103,mrsmelindabrue0103,Mrs. Melinda Bruen,Bolivia,Deportes,10,60,0,34.05238828967643,Medio,0.018
+371,USR0529,barriemcdermot0529,Barrie McDermott,Perú,Moda,13,52,0,33.18952234206471,Medio,0.018
+372,USR0312,mrdijonfeestmd0312,Mr. Dijon Feest MD,Bolivia,Gastronomía,10,58,0,32.38828967642527,Medio,0.018
+373,USR0045,villacormierlo0045,Villa Cormier-Lowe,Colombia,Gastronomía,12,52,0,31.417565485362097,Medio,0.018
+374,USR0449,audriannatrant0449,Audrianna Trantow-Erdman,Chile,Gastronomía,11,54,0,31.186440677966104,Medio,0.018
+375,USR0556,sheribode0556,Sheri Bode,Colombia,Deportes,7,63,0,30.48536209553159,Medio,0.018
+376,USR0119,kenyastrosin0119,Kenya Strosin,Colombia,Tecnología,9,58,0,29.884437596302003,Medio,0.018
+377,USR0018,ardithreinger0018,Ardith Reinger,Bolivia,Tecnología,8,58,0,28.49768875192604,Bajo,0.018
+378,USR0518,eliawest0518,Elia West,Bolivia,Viajes,8,52,0,23.020030816640986,Bajo,0.018
+379,USR0382,rainafunkfeest0382,Raina Funk-Feest,Argentina,Viajes,10,48,0,22.958397534668723,Bajo,0.018
+380,USR0481,bethanybartell0481,Bethany Bartell,Bolivia,Viajes,9,50,0,22.257318952234208,Bajo,0.018
+381,USR0347,kirkjerde0347,Kirk Jerde,Colombia,Gastronomía,7,50,0,19.599383667180277,Bajo,0.018
+382,USR0048,freddiewardray0048,Freddie Ward-Raynor,Bolivia,Deportes,5,48,0,16.60246533127889,Bajo,0.018
+383,USR0528,msarliedavisph0528,Ms. Arlie Davis PhD,Bolivia,Moda,17,59,0,47.311248073959945,Medio,0.016
+384,USR0014,drangusveum0014,Dr. Angus Veum,Bolivia,Viajes,15,60,0,44.60708782742681,Medio,0.016
+385,USR0389,eanbinsv0389,Ean Bins V,Chile,Viajes,14,63,0,44.16024653312789,Medio,0.016
+386,USR0175,troyvandervort0175,Troy Vandervort,Bolivia,Gastronomía,12,62,0,39.460708782742685,Medio,0.016
+387,USR0262,ceceliamedhurs0262,Cecelia Medhurst,Bolivia,Viajes,13,58,0,38.66718027734977,Medio,0.016
+388,USR0589,mrsamericastok0589,Mrs. America Stokes DVM,Perú,Deportes,11,62,0,37.14946070878275,Medio,0.016
+389,USR0506,lynnwalsh0506,Lynn Walsh,Chile,Tecnología,17,47,0,36.35593220338983,Medio,0.016
+390,USR0174,malerolfson0174,Male Rolfson,Bolivia,Deportes,11,57,0,33.890600924499225,Medio,0.016
+391,USR0195,delciestiedema0195,Delcie Stiedemann,Perú,Gastronomía,9,62,0,32.449922958397536,Medio,0.016
+392,USR0503,kirkwitting0503,Kirk Witting,Colombia,Deportes,10,58,0,32.38828967642527,Medio,0.016
+393,USR0147,droctaviocrook0147,Dr. Octavio Crooks DDS,Bolivia,Deportes,11,55,0,31.810477657935287,Medio,0.016
+394,USR0301,kadenbatz0301,Kaden Batz,Perú,Moda,8,58,0,28.49768875192604,Bajo,0.016
+395,USR0333,anibaldurgan0333,Anibal Durgan,Perú,Educación,9,56,0,28.081664098613253,Bajo,0.016
+396,USR0168,melvinbruen0168,Melvin Bruen,Argentina,Deportes,12,48,0,27.465331278890602,Bajo,0.016
+397,USR0006,osbornewuckert0006,Osborne Wuckert-Smith,Bolivia,Viajes,9,55,0,27.11093990755008,Bajo,0.016
+398,USR0327,chastitywalsh0327,Chastity Walsh,Colombia,Deportes,9,55,0,27.11093990755008,Bajo,0.016
+399,USR0639,rhettlindgrenn0639,Rhett Lindgren-Nicolas,Argentina,Gastronomía,11,49,0,26.332819722650232,Bajo,0.016
+400,USR0181,angellaboyer0181,Angella Boyer,Perú,Moda,9,53,0,25.308166409861325,Bajo,0.016
+401,USR0259,msjadenjakubow0259,Ms. Jaden Jakubowski,Colombia,Gastronomía,9,53,0,25.308166409861325,Bajo,0.016
+402,USR0087,lawrencegottli0087,Lawrence Gottlieb,Chile,Gastronomía,8,54,0,25.100154083204934,Bajo,0.016
+403,USR0108,jaydenskiles0108,Jayden Skiles,Bolivia,Deportes,10,50,0,24.76117103235747,Bajo,0.016
+404,USR0258,drjedhilll0258,Dr. Jed Hilll,Bolivia,Moda,9,51,0,23.57473035439137,Bajo,0.016
+405,USR0489,gaylehuelklock0489,Gayle Huel-Klocko,Perú,Moda,9,50,0,22.257318952234208,Bajo,0.016
+406,USR0561,drbowisozkdds0561,Dr. Bo Wisozk DDS,Chile,Viajes,8,50,0,20.870570107858242,Bajo,0.016
+407,USR0349,kaseykemmer0349,Kasey Kemmer,Perú,Deportes,6,48,0,17.103235747303543,Bajo,0.016
+408,USR0594,thurstonprohas0594,Thurston Prohaska,Colombia,Moda,22,60,0,51.81047765793528,Alto,0.014
+409,USR0302,missmaybelleha0302,Miss Maybelle Haley,Chile,Viajes,18,61,0,50.05392912172573,Medio,0.014
+410,USR0008,draurelioadams0008,Dr. Aurelio Adams,Perú,Gastronomía,18,60,0,49.49922958397535,Medio,0.014
+411,USR0245,kamronnolan0245,Kamron Nolan,Colombia,Educación,16,62,0,47.20338983050848,Medio,0.014
+412,USR0392,lukasdoyle0392,Lukas Doyle,Bolivia,Tecnología,16,62,0,47.20338983050848,Medio,0.014
+413,USR0385,daytoncollins0385,Dayton Collins,Perú,Deportes,16,61,0,46.856702619414484,Medio,0.014
+414,USR0488,perrijerde0488,Perri Jerde,Bolivia,Deportes,17,56,0,44.60708782742681,Medio,0.014
+415,USR0292,dreugeniokris0292,Dr. Eugenio Kris,Perú,Educación,16,56,0,42.83513097072419,Medio,0.014
+416,USR0416,ronstiedemann0416,Ron Stiedemann,Bolivia,Tecnología,16,55,0,41.864406779661024,Medio,0.014
+417,USR0434,veldawisozkpau0434,Velda Wisozk-Paucek,Chile,Tecnología,13,59,0,39.568567026194145,Medio,0.014
+418,USR0399,dwaynebechtela0399,Dwayne Bechtelar,Bolivia,Gastronomía,13,57,0,37.973805855161785,Medio,0.014
+419,USR0011,gustkuphal0011,Gust Kuphal,Argentina,Educación,14,54,0,37.503852080123266,Medio,0.014
+420,USR0217,mickylockman0217,Micky Lockman,Bolivia,Tecnología,16,50,0,37.01078582434515,Medio,0.014
+421,USR0203,mrgraylingweim0203,Mr. Grayling Weimann II,Perú,Viajes,17,48,0,36.97996918335902,Medio,0.014
+422,USR0621,geebergnaum0621,Gee Bergnaum,Argentina,Gastronomía,17,47,0,36.35593220338983,Medio,0.014
+423,USR0085,mrsteviemoen0085,Mr. Stevie Moen,Perú,Viajes,10,63,0,35.64714946070878,Medio,0.014
+424,USR0227,hustonbahringe0227,Huston Bahringer,Chile,Deportes,11,58,0,34.58397534668721,Medio,0.014
+425,USR0280,drcaslefflerph0280,Dr. Cas Leffler PhD,Colombia,Viajes,11,56,0,32.78120184899846,Medio,0.014
+426,USR0289,mrscrissybogis0289,Mrs. Crissy Bogisich,Bolivia,Gastronomía,8,64,0,32.72727272727273,Medio,0.014
+427,USR0437,drshawntepouro0437,Dr. Shawnte Pouros,Argentina,Moda,11,53,0,30.007704160246533,Medio,0.014
+428,USR0156,clariceruecker0156,Clarice Ruecker,Bolivia,Tecnología,11,52,0,29.10631741140216,Bajo,0.014
+429,USR0324,drethenmcclure0324,Dr. Ethen McClure II,Argentina,Deportes,11,51,0,28.274268104776578,Bajo,0.014
+430,USR0423,vickieosinski0423,Vickie Osinski,Bolivia,Tecnología,12,47,0,26.84129429892142,Bajo,0.014
+431,USR0441,chiptreutel0441,Chip Treutel,Bolivia,Viajes,10,50,0,24.76117103235747,Bajo,0.014
+432,USR0145,bertaryan0145,Berta Ryan,Perú,Moda,9,50,0,22.257318952234208,Bajo,0.014
+433,USR0176,drpleasantschm0176,Dr. Pleasant Schmitt,Colombia,Deportes,9,47,0,19.830508474576273,Bajo,0.014
+434,USR0143,mrdillonmraziv0143,Mr. Dillon Mraz IV,Perú,Deportes,7,48,0,17.796610169491526,Bajo,0.014
+435,USR0047,drtonihaagmd0047,Dr. Toni Haag MD,Argentina,Gastronomía,17,59,0,47.311248073959945,Medio,0.012
+436,USR0191,mrtrystanferry0191,Mr. Trystan Ferry,Argentina,Tecnología,15,59,0,43.844375963020035,Medio,0.012
+437,USR0357,clevaswaniawsk0357,Cleva Swaniawski,Perú,Moda,13,63,0,41.92604006163328,Medio,0.012
+438,USR0365,randywyman0365,Randy Wyman,Colombia,Moda,15,56,0,41.14021571648691,Medio,0.012
+439,USR0527,lenonschoen0527,Lenon Schoen,Bolivia,Educación,11,63,0,37.84283513097072,Medio,0.012
+440,USR0480,deandrehilpert0480,Deandre Hilpert,Bolivia,Moda,13,52,0,33.18952234206471,Medio,0.012
+441,USR0510,luannefeilwilk0510,Luanne Feil-Wilkinson,Bolivia,Gastronomía,10,54,0,28.99075500770416,Bajo,0.012
+442,USR0622,missieeffertz0622,Missie Effertz,Chile,Tecnología,8,56,0,26.69491525423729,Bajo,0.012
+443,USR0646,micaylamohr0646,Micayla Mohr,Perú,Educación,9,49,0,21.633281972265024,Bajo,0.012
+444,USR0271,olanmorissette0271,Olan Morissette,Bolivia,Deportes,9,48,0,20.454545454545457,Bajo,0.012
+445,USR0252,misssablehickl0252,Miss Sable Hickle,Colombia,Moda,7,49,0,18.975346687211093,Bajo,0.012
+446,USR0443,autumnjonesber0443,Autumn Jones-Bernhard,Bolivia,Gastronomía,7,49,0,18.975346687211093,Bajo,0.012
+447,USR0179,alanzostreich0179,Alanzo Streich,Bolivia,Moda,7,48,0,17.796610169491526,Bajo,0.012
+448,USR0404,loydschaden0404,Loyd Schaden,Chile,Viajes,19,57,0,48.10477657935285,Medio,0.01
+449,USR0616,drmyrticegutko0616,Dr. Myrtice Gutkowski PhD,Perú,Tecnología,13,63,0,41.92604006163328,Medio,0.01
+450,USR0536,coltromaguera0536,Colt Romaguera,Bolivia,Educación,15,55,0,40.16949152542373,Medio,0.01
+451,USR0502,draustynwillms0502,Dr. Austyn Willms,Bolivia,Educación,12,60,0,38.559322033898304,Medio,0.01
+452,USR0030,norettarowe0030,Noretta Rowe,Bolivia,Deportes,12,56,0,35.092449922958394,Medio,0.01
+453,USR0165,matildewitting0165,Matilde Witting,Bolivia,Tecnología,7,64,0,31.456086286594765,Medio,0.01
+454,USR0192,felicityarmstr0192,Felicity Armstrong,Colombia,Educación,9,59,0,30.785824345146377,Medio,0.01
+455,USR0388,darryllbeier0388,Darryll Beier,Argentina,Deportes,9,59,0,30.785824345146377,Medio,0.01
+456,USR0486,mrearnestschul0486,Mr. Earnest Schultz,Bolivia,Gastronomía,11,48,0,25.154083204930664,Bajo,0.01
+457,USR0504,tommiecronahau0504,Tommie Crona-Hauck,Argentina,Gastronomía,9,50,0,22.257318952234208,Bajo,0.01
+458,USR0205,goldiaconsidin0205,Goldia Considine,Bolivia,Educación,8,50,0,20.870570107858242,Bajo,0.01
+459,USR0430,wilhelminealte0430,Wilhelmine Altenwerth,Bolivia,Educación,7,50,0,19.599383667180277,Bajo,0.01
+460,USR0470,arnoldmorarlin0470,Arnold Morar-Lind,Colombia,Gastronomía,8,48,0,19.06779661016949,Bajo,0.01
+461,USR0410,mrsjosefitazul0410,Mrs. Josefita Zulauf,Perú,Gastronomía,10,35,0,13.389830508474576,Bajo,0.01
+462,USR0532,russelwuckert0532,Russel Wuckert,Chile,Gastronomía,8,36,0,10.192604006163327,Bajo,0.01
+463,USR0368,havenmayerphd0368,Haven Mayer PhD,Bolivia,Deportes,14,60,0,42.56548536209554,Medio,0.008
+464,USR0331,mrsmithlittle0331,Mr. Smith Little,Argentina,Deportes,13,63,0,41.92604006163328,Medio,0.008
+465,USR0031,buelkiehn0031,Buel Kiehn,Colombia,Viajes,18,51,0,41.52542372881356,Medio,0.008
+466,USR0550,dontapaucek0550,Donta Paucek,Bolivia,Educación,15,56,0,41.14021571648691,Medio,0.008
+467,USR0148,willyrenneriv0148,Willy Renner IV,Colombia,Gastronomía,14,56,0,39.098613251155626,Medio,0.008
+468,USR0308,missamericafun0308,Miss America Funk PhD,Colombia,Educación,18,39,0,31.540832049306623,Medio,0.008
+469,USR0370,draugustinesta0370,Dr. Augustine Stark MD,Bolivia,Gastronomía,10,55,0,29.614791987673346,Medio,0.008
+470,USR0450,eldredlakin0450,Eldred Lakin,Argentina,Viajes,17,38,0,29.560862865947612,Medio,0.008
+471,USR0307,lilyanaokeefe0307,Lilyana O'Keefe,Bolivia,Viajes,14,45,0,29.32203389830509,Medio,0.008
+472,USR0620,doloriskunzebe0620,Doloris Kunze-Beahan,Chile,Viajes,8,54,0,25.100154083204934,Bajo,0.008
+473,USR0439,mrsadelinareyn0439,Mrs. Adelina Reynolds,Perú,Educación,11,35,0,15.585516178736519,Bajo,0.008
+474,USR0004,msbarbieschowa0004,Ms. Barbie Schowalter DDS,Argentina,Educación,10,37,0,14.915254237288137,Bajo,0.008
+475,USR0136,mrlenondaugher0136,Mr. Lenon Daugherty PhD,Chile,Gastronomía,8,41,0,13.728813559322035,Bajo,0.008
+476,USR0476,allissonleschm0476,Allisson Lesch MD,Colombia,Viajes,6,34,0,6.771956856702619,Bajo,0.008
+477,USR0202,gainesmetz0202,Gaines Metz,Argentina,Viajes,6,32,0,5.939907550077042,Bajo,0.008
+478,USR0408,mrgerhardtlind0408,Mr. Gerhardt Lindgren,Chile,Deportes,7,24,0,3.582434514637904,Bajo,0.008
+479,USR0212,oraliapfeffer0212,Oralia Pfeffer,Perú,Viajes,2,17,0,0.41602465331278893,Bajo,0.008
+480,USR0133,byrdconn0133,Byrd Conn,Bolivia,Viajes,20,53,0,44.68412942989214,Medio,0.006
+481,USR0034,nallelysimonis0034,Nallely Simonis,Bolivia,Tecnología,22,50,0,42.51926040061633,Medio,0.006
+482,USR0469,nicklauskulasp0469,Nicklaus Kulas PhD,Chile,Moda,14,44,0,28.559322033898304,Bajo,0.006
+483,USR0025,susannahharber0025,Susannah Harber,Argentina,Gastronomía,17,35,0,27.411402157164872,Bajo,0.006
+484,USR0019,georgenemraz0019,Georgene Mraz,Bolivia,Deportes,12,45,0,25.31587057010786,Bajo,0.006
+485,USR0571,aryanaharber0571,Aryana Harber,Colombia,Moda,13,40,0,23.066255778120183,Bajo,0.006
+486,USR0283,zhaneklingphd0283,Zhane Kling PhD,Bolivia,Educación,16,29,0,22.449922958397536,Bajo,0.006
+487,USR0314,ajabeatty0314,Aja Beatty,Bolivia,Tecnología,10,43,0,19.352850539291218,Bajo,0.006
+488,USR0206,corimarvin0206,Cori Marvin,Bolivia,Deportes,10,42,0,18.659476117103235,Bajo,0.006
+489,USR0057,dralwinstolten0057,Dr. Alwin Stoltenberg Jr.,Argentina,Moda,13,33,0,18.489984591679505,Bajo,0.006
+490,USR0587,hannadooley0587,Hanna Dooley,Bolivia,Viajes,6,49,0,18.28197226502311,Bajo,0.006
+491,USR0281,donitalabadiep0281,Donita Labadie PhD,Perú,Gastronomía,12,35,0,17.896764252696457,Bajo,0.006
+492,USR0186,huystehr0186,Huy Stehr,Perú,Tecnología,13,31,0,17.727272727272727,Bajo,0.006
+493,USR0207,harlowlueilwit0207,Harlow Lueilwitz,Colombia,Moda,9,43,0,16.84899845916795,Bajo,0.006
+494,USR0614,vernalwiza0614,Vernal Wiza,Bolivia,Educación,11,36,0,16.278890600924502,Bajo,0.006
+495,USR0583,destineycolebr0583,Destiney Cole-Braun,Colombia,Educación,9,39,0,13.59013867488444,Bajo,0.006
+496,USR0325,williewillmsha0325,Willie Willms-Hahn,Bolivia,Tecnología,11,26,0,11.563944530046225,Bajo,0.006
+497,USR0406,staffordlubowi0406,Stafford Lubowitz,Colombia,Tecnología,11,11,0,8.998459167950694,Bajo,0.006
+498,USR0634,mrssonjiruntem0634,Mrs. Sonji Runte MD,Perú,Educación,10,23,0,8.39753466872111,Bajo,0.006
+499,USR0067,stewardboehmke0067,Steward Boehm-Kerluke,Bolivia,Gastronomía,5,36,0,7.727272727272727,Bajo,0.006
+500,USR0516,drluceroschamb0516,Dr. Lucero Schamberger DDS,Bolivia,Gastronomía,9,28,0,7.488443759630201,Bajo,0.006
+501,USR0102,clevalowe0102,Cleva Lowe,Perú,Educación,6,34,0,6.771956856702619,Bajo,0.006
+502,USR0361,misaelrohanphd0361,Misael Rohan PhD,Bolivia,Tecnología,5,34,0,6.271186440677967,Bajo,0.006
+503,USR0509,mrjakeschulist0509,Mr. Jake Schulist V,Bolivia,Tecnología,5,32,0,5.439137134052388,Bajo,0.006
+504,USR0101,viviennestrack0101,Vivienne Stracke PhD,Perú,Educación,8,20,0,3.7442218798151004,Bajo,0.006
+505,USR0185,truestokesiv0185,True Stokes IV,Argentina,Moda,8,19,0,3.4668721109399074,Bajo,0.006
+506,USR0582,thorsmith0582,Thor Smith,Bolivia,Tecnología,15,56,0,41.14021571648691,Medio,0.004
+507,USR0043,eusebiowitting0043,Eusebio Witting,Bolivia,Tecnología,16,43,0,31.602465331278896,Medio,0.004
+508,USR0255,abdielrunolfsd0255,Abdiel Runolfsdottir,Colombia,Gastronomía,18,37,0,30.36209553158706,Medio,0.004
+509,USR0552,solomanokon0552,Soloman O'Kon,Perú,Deportes,15,42,0,29.214175654853626,Medio,0.004
+510,USR0632,holliewestmd0632,Hollie West MD,Bolivia,Educación,16,40,0,29.036979969183363,Bajo,0.004
+511,USR0467,drwaldemarlind0467,Dr. Waldemar Lind,Bolivia,Gastronomía,7,58,0,27.22650231124808,Bajo,0.004
+512,USR0225,drantonettegra0225,Dr. Antonette Graham,Colombia,Viajes,15,39,0,26.648690292758094,Bajo,0.004
+513,USR0515,parrishgleason0515,Parrish Gleason II,Colombia,Moda,12,43,0,23.859784283513097,Bajo,0.004
+514,USR0189,rashaandickens0189,Rashaan Dickens V,Chile,Gastronomía,16,31,0,23.697996918335903,Bajo,0.004
+515,USR0383,gerrythiel0383,Gerry Thiel,Bolivia,Viajes,11,46,0,23.628659476117104,Bajo,0.004
+516,USR0626,toyaoconnell0626,Toya O'Connell,Perú,Tecnología,14,36,0,22.596302003081664,Bajo,0.004
+517,USR0092,amarimayert0092,Amari Mayert,Bolivia,Deportes,10,46,0,21.43297380585516,Bajo,0.004
+518,USR0440,renadaprohaska0440,Renada Prohaska,Perú,Viajes,12,40,0,21.294298921417564,Bajo,0.004
+519,USR0453,cheyennerunte0453,Cheyenne Runte,Chile,Moda,13,37,0,21.194144838212637,Bajo,0.004
+520,USR0574,pandorabogisic0574,Pandora Bogisich,Bolivia,Viajes,10,43,0,19.352850539291218,Bajo,0.004
+521,USR0548,mrnoelblandaph0548,Mr. Noel Blanda PhD,Bolivia,Deportes,9,46,0,18.929121725731896,Bajo,0.004
+522,USR0158,dredselmorardv0158,Dr. Edsel Morar DVM,Perú,Moda,13,34,0,18.906009244992294,Bajo,0.004
+523,USR0318,sharmankosscol0318,Sharman Koss-Collier,Bolivia,Moda,14,28,0,18.50539291217257,Bajo,0.004
+524,USR0105,odamaggio0105,Oda Maggio,Colombia,Gastronomía,9,45,0,18.305084745762716,Bajo,0.004
+525,USR0210,aribuckridge0210,Ari Buckridge,Bolivia,Gastronomía,11,39,0,18.289676425269647,Bajo,0.004
+526,USR0132,carolehills0132,Carole Hills,Bolivia,Viajes,10,41,0,17.619414483821267,Bajo,0.004
+527,USR0586,noliehoeger0586,Nolie Hoeger,Colombia,Deportes,10,41,0,17.619414483821267,Bajo,0.004
+528,USR0428,andyohara0428,Andy O'Hara,Bolivia,Educación,8,46,0,17.542372881355934,Bajo,0.004
+529,USR0562,nikkihudson0562,Nikki Hudson,Perú,Tecnología,8,46,0,17.542372881355934,Bajo,0.004
+530,USR0194,genamorar0194,Gena Morar,Argentina,Viajes,14,24,0,17.257318952234204,Bajo,0.004
+531,USR0139,evertharrisdvm0139,Evert Harris DVM,Bolivia,Moda,11,37,0,17.110939907550076,Bajo,0.004
+532,USR0435,evelynhilpert0435,Evelyn Hilpert,Bolivia,Tecnología,9,42,0,16.155624036979972,Bajo,0.004
+533,USR0162,georgettewitti0162,Georgette Witting-Denesik,Colombia,Viajes,10,39,0,16.093990755007702,Bajo,0.004
+534,USR0017,gideonquigleym0017,Gideon Quigley MD,Bolivia,Deportes,11,35,0,15.585516178736519,Bajo,0.004
+535,USR0274,ernafritsch0274,Erna Fritsch,Bolivia,Viajes,11,35,0,15.585516178736519,Bajo,0.004
+536,USR0517,caleboyle0517,Cale Boyle,Perú,Moda,13,25,0,15.30046224961479,Bajo,0.004
+537,USR0208,brittaniedare0208,Brittanie Dare,Argentina,Educación,10,37,0,14.915254237288137,Bajo,0.004
+538,USR0468,mrsdanyelmclau0468,Mrs. Danyel McLaughlin,Chile,Viajes,7,44,0,14.884437596302003,Bajo,0.004
+539,USR0020,presleynolan0020,Presley Nolan,Bolivia,Viajes,12,25,0,13.528505392912175,Bajo,0.004
+540,USR0491,mscorettareich0491,Ms. Coretta Reichert,Colombia,Deportes,10,35,0,13.389830508474576,Bajo,0.004
+541,USR0545,rosendolarkin0545,Rosendo Larkin,Bolivia,Deportes,13,14,0,13.220338983050848,Bajo,0.004
+542,USR0187,tiesharatkemd0187,Tiesha Ratke MD,Perú,Moda,10,33,0,12.211093990755009,Bajo,0.004
+543,USR0615,teresaborer0615,Teresa Borer,Bolivia,Moda,11,26,0,11.563944530046225,Bajo,0.004
+544,USR0182,droffieschoenj0182,Dr. Offie Schoen Jr.,Bolivia,Educación,10,30,0,10.963020030816642,Bajo,0.004
+545,USR0395,leishadaughert0395,Leisha Daugherty,Bolivia,Deportes,11,23,0,10.59322033898305,Bajo,0.004
+546,USR0138,garfieldaufder0138,Garfield Aufderhar,Chile,Viajes,7,38,0,10.377503852080125,Bajo,0.004
+547,USR0396,misscandinader0396,Miss Candi Nader,Perú,Gastronomía,7,38,0,10.377503852080125,Bajo,0.004
+548,USR0095,duncantorphy0095,Duncan Torphy,Perú,Moda,10,23,0,8.39753466872111,Bajo,0.004
+549,USR0590,natwunschv0590,Nat Wunsch V,Chile,Tecnología,8,31,0,7.557781201848998,Bajo,0.004
+550,USR0514,ernstnicolas0514,Ernst Nicolas,Argentina,Educación,7,34,0,7.465331278890602,Bajo,0.004
+551,USR0070,alvinjohnson0070,Alvin Johnson,Perú,Gastronomía,9,27,0,7.14175654853621,Bajo,0.004
+552,USR0351,charlottieauer0351,Charlottie Auer,Perú,Gastronomía,8,30,0,7.072419106317413,Bajo,0.004
+553,USR0100,raoulbins0100,Raoul Bins,Bolivia,Viajes,7,31,0,6.286594761171033,Bajo,0.004
+554,USR0163,fountkerlukebr0163,Fount Kerluke-Bradtke,Perú,Moda,9,23,0,5.8936825885978426,Bajo,0.004
+555,USR0229,tiannaspencer0229,Tianna Spencer,Bolivia,Educación,9,21,0,5.477657935285054,Bajo,0.004
+556,USR0588,vernaschmitt0588,Verna Schmitt,Argentina,Educación,6,30,0,5.1078582434514646,Bajo,0.004
+557,USR0125,calmosciski0125,Cal Mosciski,Colombia,Tecnología,4,30,0,4.375963020030817,Bajo,0.004
+558,USR0091,brileylang0091,Briley Lang,Bolivia,Deportes,4,29,0,3.613251155624037,Bajo,0.004
+559,USR0056,maudiemuller0056,Maudie Muller,Colombia,Gastronomía,7,24,0,3.582434514637904,Bajo,0.004
+560,USR0197,fidelprosacco0197,Fidel Prosacco,Argentina,Tecnología,7,20,0,2.473035439137134,Bajo,0.004
+561,USR0462,brittanidicki0462,Brittani Dicki,Bolivia,Moda,3,22,0,1.494607087827427,Bajo,0.004
+562,USR0150,mrtheodoretreu0150,Mr. Theodore Treutel II,Bolivia,Tecnología,24,41,0,35.685670261941446,Medio,0.002
+563,USR0431,khloeprice0431,Khloe Price,Bolivia,Gastronomía,17,46,0,35.45454545454545,Medio,0.002
+564,USR0127,drterancelesch0127,Dr. Terance Lesch,Colombia,Gastronomía,16,42,0,30.909090909090907,Medio,0.002
+565,USR0323,eustacegreenfe0323,Eustace Greenfelder-Schowalter,Bolivia,Deportes,15,44,0,30.60092449922959,Medio,0.002
+566,USR0522,elwynhaley0522,Elwyn Haley,Chile,Moda,17,39,0,30.115562403698,Medio,0.002
+567,USR0420,amadoschuster0420,Amado Schuster,Bolivia,Educación,16,40,0,29.036979969183363,Bajo,0.002
+568,USR0519,mrdeanefeestii0519,Mr. Deane Feest III,Bolivia,Gastronomía,13,46,0,27.71186440677966,Bajo,0.002
+569,USR0171,abrilkshlerin0171,Abril Kshlerin,Chile,Tecnología,15,40,0,27.34206471494607,Bajo,0.002
+570,USR0367,halekuhic0367,Hale Kuhic,Chile,Deportes,13,44,0,26.3251155624037,Bajo,0.002
+571,USR0596,jayschuppe0596,Jay Schuppe,Colombia,Viajes,14,40,0,25.300462249614792,Bajo,0.002
+572,USR0313,charltonsmitha0313,Charlton Smitham,Bolivia,Viajes,12,44,0,24.55315870570108,Bajo,0.002
+573,USR0579,kelseybechtela0579,Kelsey Bechtelar,Bolivia,Tecnología,15,35,0,23.94453004622496,Bajo,0.002
+574,USR0265,cillalarson0265,Cilla Larson,Perú,Deportes,13,41,0,23.898305084745765,Bajo,0.002
+575,USR0500,breeparisiandv0500,Bree Parisian DVM,Bolivia,Viajes,13,41,0,23.898305084745765,Bajo,0.002
+576,USR0533,edenmann0533,Eden Mann,Colombia,Educación,13,39,0,22.372881355932204,Bajo,0.002
+577,USR0072,darryrippin0072,Darry Rippin,Chile,Educación,11,43,0,21.54853620955316,Bajo,0.002
+578,USR0539,arnegleichner0539,Arne Gleichner,Argentina,Gastronomía,10,44,0,20.046224961479197,Bajo,0.002
+579,USR0037,maudkuphal0037,Maud Kuphal,Bolivia,Tecnología,13,35,0,19.668721109399073,Bajo,0.002
+580,USR0180,domenicojaskol0180,Domenico Jaskolski-Walsh,Perú,Gastronomía,10,42,0,18.659476117103235,Bajo,0.002
+581,USR0644,tyeshacremin0644,Tyesha Cremin,Chile,Deportes,12,36,0,18.590138674884436,Bajo,0.002
+582,USR0278,mrbryonhilllv0278,Mr. Bryon Hilll V,Perú,Moda,13,33,0,18.489984591679505,Bajo,0.002
+583,USR0568,mrarlinleffler0568,Mr. Arlin Leffler I,Argentina,Educación,11,39,0,18.289676425269647,Bajo,0.002
+584,USR0330,mrdemetriklock0330,Mr. Demetri Klocko MD,Bolivia,Tecnología,11,37,0,17.110939907550076,Bajo,0.002
+585,USR0097,robinadams0097,Robin Adams,Perú,Moda,10,40,0,16.787365177195685,Bajo,0.002
+586,USR0320,mieshaschummyo0320,Miesha Schumm-Yost,Argentina,Gastronomía,6,46,0,15.577812018489984,Bajo,0.002
+587,USR0107,finleyhowelldv0107,Finley Howell DVM,Bolivia,Gastronomía,9,41,0,15.115562403697998,Bajo,0.002
+588,USR0344,donaldtrompv0344,Donald Tromp V,Colombia,Moda,4,46,0,14.845916795069336,Bajo,0.002
+589,USR0290,estebanmraz0290,Esteban Mraz,Colombia,Viajes,10,36,0,14.083204930662557,Bajo,0.002
+590,USR0237,kadynveumdds0237,Kadyn Veum DDS,Colombia,Tecnología,4,44,0,13.459167950693374,Bajo,0.002
+591,USR0553,debbrabode0553,Debbra Bode,Bolivia,Viajes,13,17,0,13.359013867488443,Bajo,0.002
+592,USR0538,caelcummerata0538,Cael Cummerata,Bolivia,Educación,11,30,0,13.158705701078583,Bajo,0.002
+593,USR0637,matthiaskuvali0637,Matthias Kuvalis,Perú,Educación,7,41,0,12.45762711864407,Bajo,0.002
+594,USR0379,ulyssescorwin0379,Ulysses Corwin,Perú,Moda,10,33,0,12.211093990755009,Bajo,0.002
+595,USR0002,danelleromague0002,Danelle Romaguera,Argentina,Gastronomía,11,27,0,11.841294298921417,Bajo,0.002
+596,USR0563,gussieschiller0563,Gussie Schiller,Bolivia,Deportes,9,36,0,11.57935285053929,Bajo,0.002
+597,USR0228,demarionernser0228,Demarion Ernser,Colombia,Gastronomía,4,41,0,11.032357473035441,Bajo,0.002
+598,USR0319,mrcrockettkoss0319,Mr. Crockett Koss,Colombia,Deportes,11,22,0,10.315870570107858,Bajo,0.002
+599,USR0236,lovedickinson0236,Love Dickinson,Bolivia,Viajes,10,29,0,10.200308166409862,Bajo,0.002
+600,USR0584,yadirastanton0584,Yadira Stanton,Bolivia,Educación,9,34,0,10.12326656394453,Bajo,0.002
+601,USR0216,chasherzogv0216,Chas Herzog V,Bolivia,Gastronomía,9,33,0,9.707241910631742,Bajo,0.002
+602,USR0140,erlindanaderdd0140,Erlinda Nader DDS,Colombia,Moda,9,30,0,8.459167950693375,Bajo,0.002
+603,USR0081,mscourtneyhick0081,Ms. Courtney Hickle MD,Colombia,Moda,9,29,0,7.696456086286596,Bajo,0.002
+604,USR0534,dawnakuhic0534,Dawna Kuhic,Argentina,Viajes,9,29,0,7.696456086286596,Bajo,0.002
+605,USR0373,lusterhintzmd0373,Luster Hintz MD,Bolivia,Viajes,10,20,0,7.63482280431433,Bajo,0.002
+606,USR0183,zhanenolan0183,Zhane Nolan,Bolivia,Educación,7,34,0,7.465331278890602,Bajo,0.002
+607,USR0447,drgemmazulaufd0447,Dr. Gemma Zulauf DVM,Bolivia,Moda,6,34,0,6.771956856702619,Bajo,0.002
+608,USR0429,danigerhold0429,Dani Gerhold,Perú,Deportes,7,32,0,6.633281972265023,Bajo,0.002
+609,USR0001,raquelziemannd0001,Raquel Ziemann DDS,Perú,Tecnología,8,27,0,5.7550077041602465,Bajo,0.002
+610,USR0044,trilbyharber0044,Trilby Harber,Bolivia,Educación,9,19,0,4.853620955315871,Bajo,0.002
+611,USR0422,anthonykreiger0422,Anthony Kreiger,Colombia,Educación,7,28,0,4.830508474576272,Bajo,0.002
+612,USR0409,tishiemillsdvm0409,Tishie Mills DVM,Argentina,Tecnología,6,29,0,4.345146379044684,Bajo,0.002
+613,USR0053,kylahconnelly0053,Kylah Connelly,Argentina,Viajes,8,15,0,3.1201848998459165,Bajo,0.002
+614,USR0123,nikkowatsica0123,Nikko Watsica,Bolivia,Educación,7,19,0,2.1956856702619416,Bajo,0.002
+615,USR0350,lucinaprosacco0350,Lucina Prosacco,Perú,Moda,19,46,0,37.84283513097072,Medio,0
+616,USR0376,rosinagulgowsk0376,Rosina Gulgowski DVM,Argentina,Viajes,17,43,0,33.37442218798151,Medio,0
+617,USR0455,angelpowlowski0455,Angel Powlowski,Bolivia,Educación,19,37,0,31.3251155624037,Medio,0
+618,USR0297,trinidadwucker0297,Trinidad Wuckert,Argentina,Educación,15,42,0,29.214175654853626,Medio,0
+619,USR0090,mariowillmsiv0090,Mario Willms IV,Perú,Moda,16,38,0,27.788906009244997,Bajo,0
+620,USR0643,gundabruenkuhl0643,Gunda Bruen-Kuhlman,Bolivia,Viajes,14,42,0,27.172573189522343,Bajo,0
+621,USR0267,maryannkautzer0267,Maryann Kautzer,Bolivia,Deportes,15,33,0,22.765793528505395,Bajo,0
+622,USR0032,dentonpfanners0032,Denton Pfannerstill,Bolivia,Gastronomía,12,41,0,22.126348228043145,Bajo,0
+623,USR0604,loyalmacejkovi0604,Loyal Macejkovic,Bolivia,Gastronomía,13,37,0,21.194144838212637,Bajo,0
+624,USR0530,drtobyhilll0530,Dr. Toby Hilll,Perú,Tecnología,12,39,0,20.600924499229585,Bajo,0
+625,USR0360,andriawilkinso0360,Andria Wilkinson,Colombia,Tecnología,11,41,0,19.815100154083208,Bajo,0
+626,USR0033,dralzinaabshir0033,Dr. Alzina Abshire PhD,Argentina,Moda,11,40,0,18.983050847457626,Bajo,0
+627,USR0647,creolahintzmd0647,Creola Hintz MD,Perú,Tecnología,13,34,0,18.906009244992294,Bajo,0
+628,USR0364,hadenconnellym0364,Haden Connelly MD,Colombia,Educación,10,42,0,18.659476117103235,Bajo,0
+629,USR0266,tamikovon0266,Tamiko Von,Perú,Viajes,9,44,0,17.542372881355934,Bajo,0
+630,USR0074,drkaelveummd0074,Dr. Kael Veum MD,Colombia,Moda,9,43,0,16.84899845916795,Bajo,0
+631,USR0121,marquitayostph0121,Marquita Yost PhD,Colombia,Moda,9,41,0,15.115562403697998,Bajo,0
+632,USR0298,alishabreitenb0298,Alisha Breitenberg,Argentina,Moda,9,41,0,15.115562403697998,Bajo,0
+633,USR0244,mrashtonharber0244,Mr. Ashton Harber,Chile,Deportes,11,34,0,14.82280431432974,Bajo,0
+634,USR0387,terencegoodwin0387,Terence Goodwin,Chile,Deportes,13,22,0,14.399075500770413,Bajo,0
+635,USR0419,mendymclaughli0419,Mendy McLaughlin-Aufderhar,Chile,Deportes,12,26,0,13.875192604006164,Bajo,0
+636,USR0415,missshilohcork0415,Miss Shiloh Corkery MD,Argentina,Viajes,13,18,0,13.567026194144837,Bajo,0
+637,USR0282,idamaeoconner0282,Idamae O'Conner,Bolivia,Deportes,9,38,0,13.035439137134052,Bajo,0
+638,USR0418,bonitasauer0418,Bonita Sauer,Bolivia,Viajes,7,40,0,11.62557781201849,Bajo,0
+639,USR0041,alberthajaskol0041,Albertha Jaskolski DVM,Colombia,Tecnología,8,37,0,11.024653312788907,Bajo,0
+640,USR0407,drcamrenokunev0407,Dr. Camren Okuneva Jr.,Chile,Gastronomía,5,40,0,10.431432973805856,Bajo,0
+641,USR0554,alvirabarrows0554,Alvira Barrows,Bolivia,Tecnología,10,29,0,10.200308166409862,Bajo,0
+642,USR0490,everettmraz0490,Everett Mraz,Chile,Moda,6,36,0,8.228043143297379,Bajo,0
+643,USR0599,mrmichialbarto0599,Mr. Michial Barton,Bolivia,Tecnología,9,27,0,7.14175654853621,Bajo,0
+644,USR0352,zettaflatley0352,Zetta Flatley,Argentina,Educación,5,34,0,6.271186440677967,Bajo,0
+645,USR0166,wintershields0166,Winter Shields,Perú,Gastronomía,7,30,0,5.8012326656394455,Bajo,0
+646,USR0303,drgibsonrogahn0303,Dr. Gibson Rogahn,Bolivia,Moda,8,26,0,5.477657935285054,Bajo,0
+647,USR0063,baileepollich0063,Bailee Pollich,Perú,Gastronomía,9,20,0,5.130970724191063,Bajo,0
+648,USR0442,michalhermisto0442,Michal Hermiston-Will,Colombia,Viajes,8,25,0,5.130970724191063,Bajo,0
+649,USR0472,chandabalistre0472,Chanda Balistreri,Bolivia,Gastronomía,9,13,0,4.368258859784284,Bajo,0
+650,USR0612,kordellschowal0612,Kordell Schowalter,Perú,Educación,6,22,0,2.265023112480739,Bajo,0

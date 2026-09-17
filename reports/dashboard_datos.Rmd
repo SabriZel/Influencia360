@@ -1,0 +1,153 @@
+---
+title: "Influencia360 · Exploración de datos"
+output:
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: scroll
+    theme: flatly
+    self_contained: true
+---
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(plotly)
+library(DT)
+library(visNetwork)
+library(flexdashboard)
+usuarios <- read_csv("data/raw/usuarios.csv", show_col_types = FALSE)
+relaciones <- read_csv("data/raw/relaciones.csv", show_col_types = FALSE)
+publicaciones <- read_csv("data/raw/publicaciones.csv", show_col_types = FALSE)
+interacciones <- read_csv("data/raw/interacciones.csv", show_col_types = FALSE)
+perfiles <- read_csv("data/processed/perfiles_analiticos.csv", show_col_types = FALSE)
+```
+
+Panorama
+=======================================================================
+
+Row {data-height=140}
+-----------------------------------------------------------------------
+
+### Perfiles
+
+```{r}
+valueBox(scales::comma(nrow(usuarios)), icon = "fa-users", color = "primary")
+```
+
+### Relaciones
+
+```{r}
+valueBox(scales::comma(nrow(relaciones)), icon = "fa-share-alt", color = "info")
+```
+
+### Publicaciones
+
+```{r}
+valueBox(scales::comma(nrow(publicaciones)), icon = "fa-file", color = "warning")
+```
+
+### Interacciones
+
+```{r}
+valueBox(scales::comma(nrow(interacciones)), icon = "fa-heart", color = "success")
+```
+
+Row
+-----------------------------------------------------------------------
+
+### Perfiles por nicho
+
+```{r}
+p <- usuarios %>% count(nicho) %>%
+  ggplot(aes(reorder(nicho, n), n, fill = nicho, text = paste(nicho, n))) +
+  geom_col(show.legend = FALSE) + coord_flip() + theme_minimal() +
+  labs(x = NULL, y = "Perfiles")
+ggplotly(p, tooltip = "text")
+```
+
+### Tipos de contenido
+
+```{r}
+p <- publicaciones %>% count(tipo_contenido) %>%
+  ggplot(aes(tipo_contenido, n, fill = tipo_contenido,
+             text = paste(tipo_contenido, scales::comma(n)))) +
+  geom_col(show.legend = FALSE) + theme_minimal() +
+  labs(x = NULL, y = "Publicaciones")
+ggplotly(p, tooltip = "text")
+```
+
+Actividad
+=======================================================================
+
+Row
+-----------------------------------------------------------------------
+
+### Evolución mensual de publicaciones
+
+```{r}
+serie <- publicaciones %>%
+  mutate(mes = as.Date(format(as.Date(fecha_publicacion), "%Y-%m-01"))) %>%
+  count(mes, tipo_contenido)
+p <- ggplot(serie, aes(mes, n, color = tipo_contenido)) +
+  geom_line(linewidth = .8) + theme_minimal() +
+  labs(x = NULL, y = "Publicaciones", color = "Tipo")
+ggplotly(p)
+```
+
+### Mezcla de interacciones
+
+```{r}
+mezcla <- interacciones %>% count(tipo_interaccion)
+plot_ly(mezcla, labels = ~tipo_interaccion, values = ~n, type = "pie",
+        textinfo = "label+percent", hoverinfo = "label+value+percent") %>%
+  layout(showlegend = TRUE)
+```
+
+Red social
+=======================================================================
+
+Row
+-----------------------------------------------------------------------
+
+### Subred de las 60 cuentas con más seguidores
+
+```{r}
+top_ids <- perfiles %>% arrange(desc(seguidores)) %>% slice_head(n = 60) %>% pull(usuario_id)
+nodos <- perfiles %>% filter(usuario_id %in% top_ids) %>%
+  transmute(id = usuario_id, label = paste0("@", usuario), group = nicho,
+            value = pmax(5, sqrt(seguidores)),
+            title = paste0("<b>@", usuario, "</b><br>Seguidores: ", seguidores,
+                           "<br>Nicho: ", nicho))
+enlaces <- relaciones %>% filter(seguidor_id %in% top_ids, seguido_id %in% top_ids) %>%
+  transmute(from = seguidor_id, to = seguido_id, arrows = "to")
+visNetwork(nodos, enlaces, height = "620px") %>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
+  visPhysics(stabilization = TRUE)
+```
+
+Calidad y catálogo
+=======================================================================
+
+Row
+-----------------------------------------------------------------------
+
+### Calidad frente a impresiones
+
+```{r}
+muestra <- publicaciones %>% slice_sample(n = min(1800, nrow(publicaciones)))
+p <- ggplot(muestra, aes(calidad_contenido, impresiones, color = tipo_contenido,
+                         text = paste0(publicacion_id, "<br>Tema: ", tema))) +
+  geom_point(alpha = .55) + scale_y_log10() + theme_minimal() +
+  labs(x = "Calidad simulada", y = "Impresiones (log)", color = "Tipo")
+ggplotly(p, tooltip = "text")
+```
+
+### Catálogo de perfiles
+
+```{r}
+usuarios %>%
+  select(usuario_id, usuario, nombre, pais, nicho, fecha_registro, verificado) %>%
+  datatable(rownames = FALSE, filter = "top",
+            options = list(pageLength = 10, scrollX = TRUE))
+```

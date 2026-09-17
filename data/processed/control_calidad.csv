@@ -1,0 +1,13 @@
+control,aprobado
+Clave única de usuarios,TRUE
+Clave única de publicaciones,TRUE
+Clave única de interacciones,TRUE
+Relaciones sin duplicados,TRUE
+Seguidores con usuario válido,TRUE
+Seguidos con usuario válido,TRUE
+Autores con usuario válido,TRUE
+Interacciones con usuario válido,TRUE
+Interacciones con publicación válida,TRUE
+Sin auto-seguimientos,TRUE
+Calidad de contenido entre 0 y 1,TRUE
+Impresiones positivas,TRUE

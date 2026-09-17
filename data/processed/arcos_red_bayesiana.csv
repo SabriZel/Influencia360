@@ -1,0 +1,16 @@
+origen,destino,p_value
+alcance,potencial_influencia,9.454024726002785e-42
+actividad_seguidor,calidad_seguidor,4.703457749433853e-112
+verificado,tasa_engagement,2.204741146012854e-25
+centralidad,potencial_influencia,8.317202842097544e-100
+reciprocidad,calidad_seguidor,2.3989058622264857e-82
+frecuencia,alcance,3.540897011191493e-73
+verificado,alcance,7.783852688725869e-31
+centralidad,calidad_contenido,5.975137848606154e-41
+alcance,tasa_engagement,1.06784818068252e-13
+frecuencia,actividad_seguidor,1.5667864709542124e-43
+centralidad,reciprocidad,6.68871229220791e-11
+reciprocidad,frecuencia,1.3359288951775533e-4
+verificado,centralidad,1.2366897105483778e-54
+calidad_contenido,alcance,2.7521767870896416e-34
+tasa_engagement,potencial_influencia,1.6836725401975176e-13

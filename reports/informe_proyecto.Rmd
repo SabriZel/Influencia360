@@ -1,0 +1,860 @@
+---
+title: "Influencia360: BI para redes sociales"
+subtitle: "Identificación y evaluación de influenciadores y seguidores mediante redes bayesianas"
+author: "Proyecto BI-2"
+date: "`r format(Sys.Date(), '%d/%m/%Y')`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 3
+    number_sections: true
+    theme: flatly
+    highlight: tango
+    self_contained: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
+                      fig.align = "center", fig.width = 10, fig.height = 5.5)
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(plotly)
+library(DT)
+library(visNetwork)
+library(DiagrammeR)
+usuarios <- read_csv("data/raw/usuarios.csv", show_col_types = FALSE)
+relaciones <- read_csv("data/raw/relaciones.csv", show_col_types = FALSE)
+publicaciones <- read_csv("data/raw/publicaciones.csv", show_col_types = FALSE)
+interacciones <- read_csv("data/raw/interacciones.csv", show_col_types = FALSE)
+perfiles <- read_csv("data/processed/perfiles_analiticos.csv", show_col_types = FALSE)
+ranking <- read_csv("data/processed/ranking_influenciadores.csv", show_col_types = FALSE)
+arcos <- read_csv("data/processed/arcos_red_bayesiana.csv", show_col_types = FALSE)
+metricas <- read_csv("data/processed/metricas_modelo.csv", show_col_types = FALSE)
+escenarios <- read_csv("data/processed/escenarios_inferencia.csv", show_col_types = FALSE)
+controles <- read_csv("data/processed/control_calidad.csv", show_col_types = FALSE)
+```
+
+# Resumen ejecutivo
+
+**Influencia360** es un proyecto de Business Intelligence reproducible para analizar una red social ficticia. Integra `r nrow(usuarios)` perfiles, `r scales::comma(nrow(relaciones))` relaciones, `r scales::comma(nrow(publicaciones))` publicaciones y `r scales::comma(nrow(interacciones))` interacciones. Todos los datos de entrada están en CSV y fueron generados en R con `charlatan`; no representan personas ni comportamientos reales.
+
+El producto responde dos preguntas:
+
+1. ¿Qué cuentas tienen mayor probabilidad de poseer **alto potencial de influencia**?
+2. ¿Qué perfiles son **seguidores de alto valor** por actividad y reciprocidad?
+
+La respuesta combina indicadores de red y contenido con una red bayesiana discreta. El mejor resultado fuera de muestra fue una exactitud de `r scales::percent(max(metricas$exactitud), accuracy = .1)`; esta cifra debe compararse con una referencia aproximada de 33% por tratarse de tres clases balanceadas por cuantiles.
+
+> **Uso responsable.** Los rankings son demostrativos. En un caso real se requieren consentimiento, minimización de datos, revisión de sesgos, trazabilidad y decisión humana. Una probabilidad no es un juicio sobre una persona.
+
+# Caso de negocio y alcance
+
+## Problema
+
+Contar seguidores por sí solo no distingue una audiencia activa de una inflada, ni separa alcance de capacidad de movilización. El proyecto crea una vista integral basada en:
+
+- **Red:** seguidores, seguidos, reciprocidad y centralidad.
+- **Contenido:** frecuencia, calidad simulada e impresiones.
+- **Respuesta:** me gusta, comentarios, compartidos y guardados.
+- **Perfil:** antigüedad y verificación ficticia.
+
+## Usuarios de la solución
+
+- Analista de marketing: descubre candidatos para campañas.
+- Gestor de comunidad: encuentra seguidores comprometidos.
+- Responsable BI: explora señales, supuestos y desempeño del modelo.
+
+## Criterios de éxito
+
+El MVP debe ser reproducible, usar únicamente CSV como fuentes iniciales, evitar datos personales reales, explicar el modelo, evaluar predicciones fuera de muestra y entregar resultados explorables en HTML.
+
+# Arquitectura BI
+
+```{r arquitectura, echo=FALSE}
+DiagrammeR::grViz("digraph bi {
+  graph [rankdir=LR, bgcolor=transparent]
+  node [shape=box, style=filled, fontname=Helvetica, color='#2C3E50']
+  A [label='1. Simulación\ncharlatan', fillcolor='#D5F5E3']
+  B [label='2. CSV crudos\n4 entidades', fillcolor='#D6EAF8']
+  C [label='3. ETL y métricas\nR + dplyr', fillcolor='#FCF3CF']
+  D [label='4. Red bayesiana\nbnlearn', fillcolor='#E8DAEF']
+  E [label='5. Rankings y\nescenarios', fillcolor='#FADBD8']
+  F [label='6. RMarkdown\nHTML + dashboards', fillcolor='#D6DBDF']
+  A -> B -> C -> D -> E -> F
+}")
+```
+
+Los CSV de `data/raw/` son la capa fuente. `data/processed/` contiene productos derivados; el artefacto de `models/` puede eliminarse y reconstruirse ejecutando `Rscript run_all.R`.
+
+## Modelo de datos
+
+```{r modelo-datos, echo=FALSE}
+DiagrammeR::grViz("digraph er {
+  graph [rankdir=LR, bgcolor=transparent]
+  node [shape=record, fontname=Helvetica, style=filled, fillcolor='#F8F9F9']
+  U [label='{USUARIOS|usuario_id (PK)|nicho|pais|verificado}']
+  R [label='{RELACIONES|seguidor_id (FK)|seguido_id (FK)|fecha_seguimiento}']
+  P [label='{PUBLICACIONES|publicacion_id (PK)|autor_id (FK)|tipo|impresiones}']
+  I [label='{INTERACCIONES|interaccion_id (PK)|usuario_id (FK)|publicacion_id (FK)|tipo}']
+  U -> P [label='publica']
+  U -> R [label='sigue / es seguido']
+  U -> I [label='realiza']
+  P -> I [label='recibe']
+}")
+```
+
+# Datos fuente ficticios
+
+## Qué significa que sean datos sintéticos
+
+Los archivos de entrada no fueron extraídos de Instagram, TikTok, X ni de otra plataforma. Se construyeron específicamente para este proyecto mediante `R/01_generar_datos.R`, usando la semilla **20260917**. Una semilla fija hace que las selecciones pseudoaleatorias produzcan exactamente los mismos registros en cada ejecución y permite auditar todo el análisis.
+
+El paquete `charlatan` genera elementos con apariencia realista, pero inventados: nombres, ocupaciones, organizaciones y coordenadas. El script agrega atributos propios del caso de negocio y simula relaciones, publicaciones e interacciones. Ninguna fila debe asociarse con una persona real.
+
+Hay dos tipos de variables en la simulación:
+
+- **Variables observables:** son las columnas que finalmente se escriben en los CSV, por ejemplo nicho, tipo de contenido, impresiones o tipo de interacción.
+- **Variables latentes de simulación:** `atractivo_latente`, `actividad_latente` y `confianza_latente` ayudan a producir heterogeneidad plausible, pero se eliminan antes de guardar `usuarios.csv`. El modelo no puede verlas. Esto imita el hecho de que en un sistema real existen características no observadas que influyen en el comportamiento.
+
+La geolocalización también es ficticia. El país se muestrea independientemente de latitud y longitud, de modo que esas coordenadas **no deben utilizarse para análisis geográfico** ni se espera que caigan dentro del país declarado. Se conservan únicamente para ilustrar tipos de campos habituales.
+
+## Inventario y granularidad
+
+Cada archivo representa un nivel distinto de observación. Confundir esos niveles produciría conteos duplicados; por ejemplo, unir directamente usuarios, publicaciones e interacciones genera una fila por interacción, no una fila por usuario.
+
+```{r inventario-fuentes, echo=FALSE}
+tibble(
+  archivo = c("usuarios.csv", "relaciones.csv", "publicaciones.csv", "interacciones.csv"),
+  granularidad = c("Una fila por perfil", "Una fila por vínculo dirigido y único",
+                   "Una fila por publicación", "Una fila por acción usuario-publicación-tipo"),
+  filas = c(nrow(usuarios), nrow(relaciones), nrow(publicaciones), nrow(interacciones)),
+  clave = c("usuario_id", "seguidor_id + seguido_id", "publicacion_id", "interaccion_id"),
+  periodo = c(
+    paste(min(usuarios$fecha_registro), "a", max(usuarios$fecha_registro)),
+    paste(min(relaciones$fecha_seguimiento), "a", max(relaciones$fecha_seguimiento)),
+    paste(min(publicaciones$fecha_publicacion), "a", max(publicaciones$fecha_publicacion)),
+    paste(min(interacciones$fecha_interaccion), "a", max(interacciones$fecha_interaccion))
+  )
+) %>%
+  datatable(rownames = FALSE, options = list(dom = "t", scrollX = TRUE, pageLength = 4))
+```
+
+Las relaciones entre entidades son:
+
+- Un usuario puede publicar cero o muchas publicaciones: **USUARIOS 1:N PUBLICACIONES**.
+- Un usuario puede realizar cero o muchas interacciones y cada publicación puede recibir muchas: **USUARIOS N:M PUBLICACIONES**, resuelto mediante `interacciones.csv`.
+- Los usuarios se conectan entre sí con una relación dirigida: **USUARIOS N:M USUARIOS**, resuelta mediante `relaciones.csv`. Que A siga a B no implica que B siga a A.
+
+## `usuarios.csv`: catálogo de perfiles
+
+Contiene `r nrow(usuarios)` identidades sintéticas. Es la tabla maestra a la que apuntan todas las claves de usuario.
+
+```{r diccionario-usuarios, echo=FALSE}
+tribble(
+  ~campo, ~tipo, ~generacion, ~uso_analitico,
+  "usuario_id", "Texto", "Secuencia USR0001...", "Clave primaria estable",
+  "usuario", "Texto", "Nombre normalizado + número", "Etiqueta pública ficticia",
+  "nombre", "Texto", "charlatan::ch_name()", "Descripción; no entra al modelo",
+  "ocupacion", "Texto", "charlatan::ch_job()", "Contexto ficticio",
+  "organizacion", "Texto", "charlatan::ch_company()", "Contexto ficticio",
+  "pais", "Categoría", "Muestra de cinco países", "Segmentación descriptiva",
+  "nicho", "Categoría", "Muestra de seis temas", "Afinidad y segmentación",
+  "fecha_registro", "Fecha", "Fecha aleatoria desde 2018", "Antigüedad de cuenta",
+  "latitud / longitud", "Decimal", "charlatan::ch_lat/ch_lon()", "Ilustrativo; no modelado",
+  "verificado", "Lógico", "Probabilidad dependiente de señales latentes", "Evidencia del modelo"
+) %>% knitr::kable(align = c("l", "l", "l", "l"))
+```
+
+La verificación no se asigna con una probabilidad uniforme. El script usa una función logística dependiente del atractivo y confianza latentes; por eso sólo `r scales::percent(mean(usuarios$verificado), accuracy = .1)` de las cuentas queda verificada y existe una asociación deliberada con otras señales de visibilidad.
+
+```{r composicion-usuarios, echo=FALSE}
+usuarios %>% count(pais, nicho) %>%
+  ggplot(aes(nicho, pais, fill = n)) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = n), size = 3) +
+  scale_fill_gradient(low = "#EAF2F8", high = "#2471A3") +
+  labs(title = "Composición de perfiles por país y nicho", x = NULL, y = NULL,
+       fill = "Perfiles") +
+  theme_minimal()
+```
+
+## `relaciones.csv`: red de seguimiento
+
+Cada fila representa el arco dirigido `seguidor_id -> seguido_id`. Para cada perfil se simula una cantidad de cuentas seguidas mediante una distribución de Poisson. La selección del destino no es uniforme: aumenta con el atractivo latente, la verificación y la coincidencia de nicho.
+
+```{r diccionario-relaciones, echo=FALSE}
+tribble(
+  ~campo, ~tipo, ~descripcion, ~uso_analitico,
+  "seguidor_id", "Texto", "Usuario que inicia el seguimiento", "Grado de salida y actividad relacional",
+  "seguido_id", "Texto", "Usuario que recibe el seguimiento", "Grado de entrada o seguidores",
+  "fecha_seguimiento", "Fecha", "Inicio ficticio del vínculo", "Evolución temporal futura"
+) %>% knitr::kable(align = c("l", "l", "l", "l"))
+```
+
+Este mecanismo introduce **homofilia**: cuentas con intereses similares tienden a conectarse. También crea una distribución desigual de popularidad y permite calcular:
+
+- `seguidores`: cantidad de arcos entrantes;
+- `seguidos`: cantidad de arcos salientes;
+- `reciprocidad`: proporción de vínculos salientes que también existen en dirección contraria;
+- `centralidad`: seguidores del perfil divididos por el máximo de seguidores observado.
+
+En esta simulación, la cuenta mediana tiene `r median(perfiles$seguidores)` seguidores, el máximo es `r max(perfiles$seguidores)` y la mediana de cuentas seguidas es `r median(perfiles$seguidos)`.
+
+### Grafo de relaciones de seguimiento
+
+La primera vista representa la red completa: `r nrow(usuarios)` cuentas y `r scales::comma(nrow(relaciones))` relaciones dirigidas. Todos los perfiles utilizan la misma forma circular, sin diferenciar si están verificados. Para reducir la saturación, las etiquetas permanecen ocultas hasta seleccionar o buscar un nodo.
+
+```{r grafo-relaciones-completo, echo=FALSE}
+nodos_totales <- perfiles %>%
+  transmute(
+    id = usuario_id,
+    label = paste0("@", usuario),
+    group = nicho,
+    value = pmax(3, 2 + sqrt(seguidores)),
+    shape = "dot",
+    title = paste0(
+      "<b>@", usuario, "</b>",
+      "<br>Nombre: ", nombre,
+      "<br>Nicho: ", nicho,
+      "<br>País: ", pais,
+      "<br>Seguidores: ", seguidores,
+      "<br>Seguidos: ", seguidos
+    )
+  )
+
+arcos_totales <- relaciones %>%
+  transmute(from = seguidor_id, to = seguido_id, arrows = "to")
+
+visNetwork(nodos_totales, arcos_totales, height = "720px", width = "100%",
+           main = "Red completa de seguimiento") %>%
+  visNodes(borderWidth = 0.5, font = list(size = 0)) %>%
+  visEdges(width = 0.25,
+           color = list(color = "rgba(149, 165, 166, 0.30)",
+                        highlight = "#E74C3C"),
+           arrows = list(to = list(enabled = TRUE, scaleFactor = 0.25)),
+           smooth = FALSE) %>%
+  visOptions(highlightNearest = list(enabled = TRUE, degree = 1),
+             nodesIdSelection = TRUE) %>%
+  visInteraction(navigationButtons = TRUE, keyboard = TRUE,
+                 hideEdgesOnDrag = TRUE, tooltipDelay = 100) %>%
+  visLayout(randomSeed = 2026, improvedLayout = FALSE) %>%
+  visPhysics(solver = "forceAtlas2Based",
+             forceAtlas2Based = list(gravitationalConstant = -38,
+                                     springLength = 65,
+                                     springConstant = 0.025,
+                                     avoidOverlap = 0.15),
+             stabilization = list(enabled = TRUE, iterations = 900,
+                                  updateInterval = 50)) %>%
+  visLegend(position = "right", useGroups = TRUE, width = 0.16)
+```
+
+En esta vista global el color representa únicamente el nicho. El tamaño se ajusta suavemente mediante la raíz cuadrada de los seguidores para hacer visibles las cuentas centrales sin ocultar los nodos pequeños. Las flechas conservan la dirección `seguidor -> seguido`.
+
+#### Vista detallada de las 50 cuentas con más seguidores
+
+La red completa permite observar densidad y agrupamientos generales, pero sus miles de arcos dificultan examinar relaciones individuales. La siguiente visualización muestra la **subred inducida por las 50 cuentas con mayor número de seguidores**: se seleccionan esas cuentas y se conservan todas las relaciones de `relaciones.csv` cuyos dos extremos pertenecen al grupo.
+
+```{r grafo-relaciones, echo=FALSE}
+ids_grafo <- perfiles %>%
+  arrange(desc(seguidores)) %>%
+  slice_head(n = 50) %>%
+  pull(usuario_id)
+
+nodos_relaciones <- perfiles %>%
+  filter(usuario_id %in% ids_grafo) %>%
+  transmute(
+    id = usuario_id,
+    label = paste0("@", usuario),
+    group = nicho,
+    value = pmax(8, 7 + seguidores),
+    shape = ifelse(verificado, "star", "dot"),
+    title = paste0(
+      "<b>@", usuario, "</b>",
+      "<br>Nombre: ", nombre,
+      "<br>Nicho: ", nicho,
+      "<br>País: ", pais,
+      "<br>Seguidores: ", seguidores,
+      "<br>Seguidos: ", seguidos,
+      "<br>Verificado: ", ifelse(verificado, "Sí", "No")
+    )
+  )
+
+arcos_relaciones <- relaciones %>%
+  filter(seguidor_id %in% ids_grafo, seguido_id %in% ids_grafo) %>%
+  transmute(
+    from = seguidor_id,
+    to = seguido_id,
+    arrows = "to",
+    title = paste0("Sigue desde: ", fecha_seguimiento)
+  )
+
+visNetwork(nodos_relaciones, arcos_relaciones, height = "650px", width = "100%",
+           main = "Subred de las 50 cuentas con más seguidores") %>%
+  visNodes(borderWidth = 1.5, font = list(size = 14)) %>%
+  visEdges(color = list(color = "#AAB7B8", highlight = "#E74C3C"),
+           smooth = list(enabled = TRUE, type = "dynamic")) %>%
+  visOptions(highlightNearest = list(enabled = TRUE, degree = 1, hover = TRUE),
+             nodesIdSelection = TRUE) %>%
+  visInteraction(navigationButtons = TRUE, keyboard = TRUE) %>%
+  visPhysics(solver = "forceAtlas2Based",
+             forceAtlas2Based = list(gravitationalConstant = -55,
+                                     springLength = 110,
+                                     avoidOverlap = 0.7),
+             stabilization = list(enabled = TRUE, iterations = 700)) %>%
+  visLegend(position = "right", useGroups = TRUE, width = 0.18)
+```
+
+Cómo interpretar el gráfico:
+
+- Cada **nodo** es una cuenta; su etiqueta muestra el nombre de usuario.
+- Una flecha `A -> B` significa que **A sigue a B**.
+- El **tamaño** aumenta con la cantidad total de seguidores recibidos en la red completa.
+- El **color** identifica el nicho del perfil.
+- Una **estrella** representa una cuenta verificada ficticia; un círculo, una no verificada.
+- Al seleccionar un nodo se resaltan sus relaciones inmediatas. El cuadro desplegable permite localizar una cuenta y el cursor muestra sus atributos.
+
+Esta visualización sirve para reconocer concentraciones, cuentas centrales, afinidad temática y vínculos recíprocos. La posición espacial es calculada por un algoritmo de fuerzas para facilitar la lectura; no representa ubicación geográfica ni una métrica adicional del modelo.
+
+## `publicaciones.csv`: contenido y exposición
+
+Contiene `r scales::comma(nrow(publicaciones))` piezas de contenido. Los autores se seleccionan con mayor probabilidad cuando poseen actividad latente alta. La calidad simulada combina variación aleatoria con el atractivo latente del autor; las impresiones aumentan con esa calidad y con la verificación, además de contener ruido.
+
+```{r diccionario-publicaciones, echo=FALSE}
+tribble(
+  ~campo, ~tipo, ~descripcion, ~uso_analitico,
+  "publicacion_id", "Texto", "Clave PUB000001...", "Clave primaria",
+  "autor_id", "Texto", "Perfil que publica", "Clave foránea a usuarios",
+  "fecha_publicacion", "Fecha", "Día ficticio de publicación", "Frecuencia y series temporales",
+  "tipo_contenido", "Categoría", "Imagen, video, texto o historia", "Comparación de formatos",
+  "tema", "Categoría", "Coincide normalmente con el nicho del autor", "Afinidad temática",
+  "calidad_contenido", "Decimal [0,1]", "Señal sintética de calidad", "Promedio por autor",
+  "impresiones", "Entero positivo", "Exposición simulada con distribución asimétrica", "Alcance y denominador de engagement"
+) %>% knitr::kable(align = c("l", "l", "l", "l"))
+```
+
+En 78% de las publicaciones el tema se fuerza a coincidir con el nicho del autor; el resto explora otro tema. Las impresiones se generan en escala logarítmica, por lo que unas pocas piezas alcanzan mucha más exposición que la mayoría, un patrón habitual en redes sociales. La mediana observada es `r scales::comma(median(publicaciones$impresiones))` impresiones y el percentil 90 es `r scales::comma(unname(quantile(publicaciones$impresiones, .90)))`.
+
+## `interacciones.csv`: respuesta de la audiencia
+
+Registra acciones sobre publicaciones. Las publicaciones de mayor calidad y exposición tienen mayor probabilidad de ser seleccionadas; los usuarios con actividad latente alta interactúan más. La afinidad de nicho incrementa ligeramente la probabilidad de comentar, compartir o guardar.
+
+```{r diccionario-interacciones, echo=FALSE}
+tribble(
+  ~campo, ~tipo, ~descripcion, ~uso_analitico,
+  "interaccion_id", "Texto", "Clave INT0000001...", "Clave primaria",
+  "usuario_id", "Texto", "Perfil que ejecuta la acción", "Actividad como seguidor",
+  "publicacion_id", "Texto", "Contenido que recibe la acción", "Unión con autor e impresiones",
+  "tipo_interaccion", "Categoría", "Me gusta, comentario, compartido o guardado", "Intensidad y composición de respuesta",
+  "fecha_interaccion", "Fecha", "Entre 0 y 14 días después de publicar", "Ventana temporal de respuesta"
+) %>% knitr::kable(align = c("l", "l", "l", "l"))
+```
+
+### Grafo combinado de publicaciones e interacciones
+
+La unión entre `publicaciones.csv` e `interacciones.csv` forma una red de tres capas: autores a la izquierda, contenido en el centro y usuarios que interactúan a la derecha. Para conservar legibilidad se seleccionan las 25 publicaciones con mayor cantidad de interacciones y los 60 usuarios más activos sobre ellas.
+
+```{r grafo-publicaciones-interacciones, echo=FALSE}
+estadisticas_publicacion <- interacciones %>%
+  group_by(publicacion_id) %>%
+  summarise(
+    interacciones_recibidas = n(),
+    usuarios_unicos = n_distinct(usuario_id),
+    .groups = "drop"
+  )
+
+ids_publicaciones_top <- estadisticas_publicacion %>%
+  arrange(desc(interacciones_recibidas), desc(usuarios_unicos)) %>%
+  slice_head(n = 25) %>%
+  pull(publicacion_id)
+
+ids_usuarios_top <- interacciones %>%
+  filter(publicacion_id %in% ids_publicaciones_top) %>%
+  count(usuario_id, sort = TRUE) %>%
+  slice_head(n = 60) %>%
+  pull(usuario_id)
+
+nodos_usuarios_pi <- perfiles %>%
+  filter(usuario_id %in% ids_usuarios_top) %>%
+  transmute(
+    id = paste0("U_", usuario_id),
+    label = paste0("@", usuario),
+    group = "Usuario que interactúa",
+    shape = "dot",
+    level = 3,
+    value = pmax(8, 5 + sqrt(interacciones_emitidas)),
+    title = paste0(
+      "<b>Usuario @", usuario, "</b>",
+      "<br>Nicho: ", nicho,
+      "<br>País: ", pais,
+      "<br>Interacciones emitidas totales: ", interacciones_emitidas
+    )
+  )
+
+nodos_publicaciones_pi <- publicaciones %>%
+  filter(publicacion_id %in% ids_publicaciones_top) %>%
+  left_join(estadisticas_publicacion, by = "publicacion_id") %>%
+  left_join(usuarios %>% select(autor_id = usuario_id, autor = usuario), by = "autor_id") %>%
+  transmute(
+    id = paste0("P_", publicacion_id),
+    label = paste0(tipo_contenido, " · ", sub("PUB", "", publicacion_id)),
+    group = paste0("Contenido: ", tipo_contenido),
+    shape = "box",
+    level = 2,
+    value = pmax(12, 7 + 1.5 * sqrt(interacciones_recibidas)),
+    title = paste0(
+      "<b>", publicacion_id, "</b>",
+      "<br>Autor: @", autor,
+      "<br>Formato: ", tipo_contenido,
+      "<br>Tema: ", tema,
+      "<br>Calidad simulada: ", round(calidad_contenido, 3),
+      "<br>Impresiones: ", scales::comma(impresiones),
+      "<br>Interacciones: ", interacciones_recibidas,
+      "<br>Usuarios únicos: ", usuarios_unicos
+    )
+  )
+
+nodos_autores_pi <- publicaciones %>%
+  filter(publicacion_id %in% ids_publicaciones_top) %>%
+  count(autor_id, name = "publicaciones_destacadas") %>%
+  left_join(perfiles, by = c("autor_id" = "usuario_id")) %>%
+  transmute(
+    id = paste0("A_", autor_id),
+    label = paste0("@", usuario),
+    group = "Autor",
+    shape = "diamond",
+    level = 1,
+    value = 10 + 2 * publicaciones_destacadas,
+    title = paste0(
+      "<b>Autor @", usuario, "</b>",
+      "<br>Nicho: ", nicho,
+      "<br>País: ", pais,
+      "<br>Publicaciones destacadas: ", publicaciones_destacadas,
+      "<br>Seguidores: ", seguidores,
+      "<br>Engagement total: ", round(tasa_engagement, 2), "%"
+    )
+  )
+
+arcos_pi <- interacciones %>%
+  filter(publicacion_id %in% ids_publicaciones_top,
+         usuario_id %in% ids_usuarios_top) %>%
+  group_by(usuario_id, publicacion_id) %>%
+  summarise(
+    acciones = n(),
+    tipos = paste(sort(unique(tipo_interaccion)), collapse = ", "),
+    .groups = "drop"
+  ) %>%
+  transmute(
+    from = paste0("U_", usuario_id),
+    to = paste0("P_", publicacion_id),
+    width = 0.6 + acciones * 0.7,
+    arrows = "to",
+    color = "rgba(127, 140, 141, 0.38)",
+    dashes = FALSE,
+    title = paste0("Acciones: ", tipos)
+  )
+
+arcos_autoria_pi <- publicaciones %>%
+  filter(publicacion_id %in% ids_publicaciones_top) %>%
+  transmute(
+    from = paste0("A_", autor_id),
+    to = paste0("P_", publicacion_id),
+    width = 1.8,
+    arrows = "to",
+    color = "#8E44AD",
+    dashes = TRUE,
+    title = "Publicada por este autor"
+  )
+
+visNetwork(bind_rows(nodos_usuarios_pi, nodos_publicaciones_pi, nodos_autores_pi),
+           bind_rows(arcos_pi, arcos_autoria_pi),
+           height = "760px", width = "100%",
+           main = "Autores → publicaciones ← usuarios que interactúan") %>%
+  visGroups(groupname = "Usuario que interactúa", color = "#7F8C8D", shape = "dot") %>%
+  visGroups(groupname = "Contenido: Imagen", color = "#3498DB", shape = "box") %>%
+  visGroups(groupname = "Contenido: Video", color = "#E74C3C", shape = "box") %>%
+  visGroups(groupname = "Contenido: Texto", color = "#27AE60", shape = "box") %>%
+  visGroups(groupname = "Contenido: Historia", color = "#F39C12", shape = "box") %>%
+  visGroups(groupname = "Autor", color = "#8E44AD", shape = "diamond") %>%
+  visEdges(smooth = list(enabled = TRUE, type = "cubicBezier")) %>%
+  visHierarchicalLayout(direction = "LR", levelSeparation = 350,
+                        nodeSpacing = 75, sortMethod = "directed") %>%
+  visOptions(highlightNearest = list(enabled = TRUE, degree = 1),
+             nodesIdSelection = TRUE) %>%
+  visInteraction(navigationButtons = TRUE, keyboard = TRUE,
+                 hideEdgesOnDrag = TRUE) %>%
+  visLegend(position = "right", useGroups = TRUE, width = 0.20)
+```
+
+Cómo interpretar esta red:
+
+- Los **rombos morados de la izquierda** son los autores, los **rectángulos de colores del centro** son sus publicaciones y los **círculos grises de la derecha** son usuarios que interactúan.
+- Los usuarios de la derecha no necesariamente siguen al autor en `relaciones.csv`; representan el rol de audiencia observado en `interacciones.csv`.
+- El color de una publicación identifica su formato: imagen, video, texto o historia.
+- Una flecha `usuario -> publicación` indica que el usuario realizó al menos una acción sobre ese contenido.
+- Una línea morada discontinua `autor -> publicación` identifica quién creó el contenido.
+- El grosor de la conexión aumenta cuando el usuario realizó varios tipos de acción sobre la misma publicación.
+- El tamaño de la publicación refleja las interacciones recibidas; el del usuario resume su actividad total y el del autor aumenta cuando tiene varias publicaciones destacadas.
+- Al pasar el cursor por una conexión se muestran los tipos de acción; sobre cada nodo aparecen sus métricas relevantes.
+
+Un mismo perfil puede aparecer dos veces si participa en ambos roles: con prefijo interno `A_` como autor y con `U_` como usuario que interactúa. La separación es intencional para mantener legible la estructura **autoría → contenido ← respuesta de la audiencia**.
+
+Este grafo permite localizar contenido que concentra respuesta, publicaciones que comparten audiencia, seguidores particularmente activos y autores que acumulan varias piezas destacadas. Es una vista exploratoria de una selección relevante, no de la totalidad de las `r scales::comma(nrow(interacciones))` interacciones.
+
+El script elimina auto-interacciones y duplicados exactos de usuario, publicación y tipo. Una persona sí puede efectuar distintos tipos de acción sobre la misma publicación. La mezcla resultante es:
+
+```{r mezcla-interacciones, echo=FALSE}
+interacciones %>%
+  count(tipo_interaccion) %>%
+  mutate(porcentaje = scales::percent(n / sum(n), accuracy = .1)) %>%
+  arrange(desc(n)) %>%
+  knitr::kable(col.names = c("Tipo", "Cantidad", "Porcentaje"), align = c("l", "r", "r"))
+```
+
+## Reglas de realismo incorporadas
+
+La simulación no busca copiar una plataforma concreta. Busca producir un conjunto coherente en el que el proceso BI pueda encontrar relaciones conocidas:
+
+1. **Heterogeneidad:** los perfiles no tienen idéntica actividad, confianza ni atractivo.
+2. **Homofilia:** compartir nicho eleva la probabilidad de conexión.
+3. **Preferencia acumulativa:** perfiles atractivos o verificados reciben más atención.
+4. **Calidad y exposición:** mejor contenido tiende a obtener más impresiones, con ruido suficiente para evitar una regla perfecta.
+5. **Afinidad y respuesta:** usuarios afines son algo más propensos a acciones de mayor compromiso.
+6. **Distribuciones asimétricas:** seguidores e impresiones se concentran en una minoría.
+
+Estas dependencias son útiles para probar si el pipeline recupera señales. No demuestran que el mundo real funcione exactamente así; son **supuestos del generador de datos**.
+
+## Calidad e integridad
+
+Antes de modelar se ejecutan doce pruebas: unicidad de claves, referencias válidas, ausencia de auto-seguimiento, rangos de calidad e impresiones positivas.
+
+```{r calidad-datos, echo=FALSE}
+controles %>%
+  mutate(resultado = ifelse(aprobado, "Aprobado", "Falló")) %>%
+  select(control, resultado) %>%
+  datatable(rownames = FALSE, options = list(dom = "t", pageLength = 12))
+```
+
+La existencia de señales conocidas y datos íntegros permite validar técnicamente el proceso. Sin embargo, un buen resultado sobre esta simulación no garantiza desempeño sobre datos reales ni elimina la necesidad de validación externa.
+
+# Indicadores analíticos
+
+| Indicador | Cálculo | Interpretación |
+|---|---|---|
+| Seguidores | Grado de entrada | Audiencia directa |
+| Centralidad | Seguidores / máximo observado | Posición relativa en esta red |
+| Engagement | Interacciones recibidas / impresiones | Respuesta ajustada por exposición |
+| Reciprocidad | Vínculos mutuos / cuentas seguidas | Relación bidireccional |
+| Score de influencia | Compuesto de red, alcance, engagement, calidad y verificación | Etiqueta de entrenamiento demostrativa |
+| Potencial de influencia | Tercil del score de influencia | Clase objetivo: Bajo, Medio o Alto |
+| Score de seguidor | Compuesto de actividad, reciprocidad y amplitud | Valor de participación demostrativo |
+
+## ¿Qué significa “Potencial”?
+
+En este proyecto, **potencial de influencia** significa que un perfil reúne varias señales que, según una definición sintética de negocio, lo convierten en un candidato prioritario para revisión. Se usa la palabra “potencial” porque no se observa una campaña real ni su resultado económico: se estima capacidad aparente a partir de audiencia, exposición, respuesta y contenido.
+
+Primero se calcula un score entre 0 y 100:
+
+$$
+Score_{influencia}=100\left(0.28R_{seguidores}+0.24R_{impresiones}+
+0.22R_{engagement}+0.16R_{calidad}+0.10V\right),
+$$
+
+donde cada $R$ es el rango percentil de la variable, expresado entre 0 y 1, y $V$ vale 1 si la cuenta ficticia está verificada y 0 en caso contrario. En consecuencia:
+
+- **28% — seguidores:** representa el tamaño relativo de la audiencia directa;
+- **24% — impresiones:** representa el alcance acumulado del contenido;
+- **22% — engagement:** representa la respuesta obtenida en relación con la exposición;
+- **16% — calidad:** resume la calidad simulada de las publicaciones;
+- **10% — verificación:** agrega una señal ficticia de confianza o reconocimiento.
+
+Los pesos son una **decisión de diseño del caso académico**, no valores universales descubiertos por el modelo. En una aplicación real deberían acordarse con especialistas, justificarse mediante objetivos de campaña y someterse a análisis de sensibilidad.
+
+Después, el score se divide por terciles observados:
+
+- **Potencial Bajo:** score menor o igual a `r round(unname(quantile(perfiles$score_influencia, 1/3, type = 8)), 1)`.
+- **Potencial Medio:** mayor a `r round(unname(quantile(perfiles$score_influencia, 1/3, type = 8)), 1)` y menor o igual a `r round(unname(quantile(perfiles$score_influencia, 2/3, type = 8)), 1)`.
+- **Potencial Alto:** score mayor a `r round(unname(quantile(perfiles$score_influencia, 2/3, type = 8)), 1)`.
+
+Conviene distinguir tres resultados:
+
+1. El **score de influencia** es el valor compuesto continuo de 0 a 100.
+2. La **clase de potencial** es Bajo, Medio o Alto según la posición del score en la población simulada.
+3. La **probabilidad bayesiana de potencial alto** es $P(Potencial=Alto\mid Evidencias)$, calculada por la red a partir de los estados observados del perfil.
+
+Por tanto, “Alto” no significa que la persona vaya a generar ventas, cambiar opiniones o crecer en el futuro con certeza. Tampoco mide autenticidad de seguidores, adecuación de marca, costo o impacto causal. Significa únicamente que el perfil se parece, bajo los criterios definidos y dentro de esta base ficticia, al grupo con score superior.
+
+Esta etiqueta es útil para demostrar clasificación, inferencia y priorización. Sin embargo, como se construye con varias variables que después también alimentan la red bayesiana, el resultado evalúa principalmente si el modelo reconstruye esa definición. Para una aplicación real, “potencial” debería definirse mediante un resultado posterior independiente, como conversiones incrementales, ventas, retención o desempeño comprobado de campañas.
+
+Los *scores* generan etiquetas Baja/Media/Alta mediante terciles. La red bayesiana aprende la distribución conjunta y permite calcular probabilidades condicionadas, no sólo repetir un orden determinista.
+
+```{r panorama, echo=FALSE}
+p <- ggplot(perfiles, aes(seguidores, tasa_engagement, color = clase_influencia,
+                          text = paste0("@", usuario, "<br>Nicho: ", nicho))) +
+  geom_point(alpha = .72, size = 2) +
+  scale_x_log10() +
+  labs(title = "Alcance estructural frente a respuesta", x = "Seguidores (escala log)",
+       y = "Engagement (%)", color = "Potencial") +
+  theme_minimal()
+ggplotly(p, tooltip = "text")
+```
+
+# Redes bayesianas
+
+## De la probabilidad condicional al teorema de Bayes
+
+Una probabilidad simple, como $P(I)$, puede expresar la proporción de perfiles con influencia alta. Una **probabilidad condicional**, $P(I\mid E)$, responde una pregunta distinta: ¿cuál es la probabilidad de influencia alta *sabiendo* que observamos cierta evidencia $E$?
+
+Por definición:
+
+$$P(I\mid E)=\frac{P(I\cap E)}{P(E)}$$
+
+Como la intersección puede escribirse en ambos sentidos,
+
+$$P(I\cap E)=P(E\mid I)P(I)=P(I\mid E)P(E),$$
+
+se obtiene el **teorema de Bayes**:
+
+$$P(I\mid E)=\frac{P(E\mid I)P(I)}{P(E)}.$$
+
+Cada término tiene una lectura concreta en este proyecto:
+
+- $P(I)$ es el **prior** o probabilidad inicial de que un perfil tenga influencia alta antes de incorporar la evidencia.
+- $P(E\mid I)$ es la **verosimilitud**: qué tan compatible es observar, por ejemplo, alcance y engagement altos entre perfiles de influencia alta.
+- $P(E)$ es la **evidencia marginal** o constante de normalización; considera cuán frecuente es esa combinación en toda la población.
+- $P(I\mid E)$ es el **posterior**: la creencia actualizada después de observar los indicadores del perfil.
+
+Para hipótesis mutuamente excluyentes —influencia baja, media o alta— la evidencia se calcula con la ley de probabilidad total:
+
+$$P(E)=\sum_{k\in\{Bajo,Medio,Alto\}}P(E\mid I=k)P(I=k).$$
+
+Esto garantiza que las probabilidades posteriores de las tres clases sumen uno. Una evidencia favorable a la clase Alta aumenta su probabilidad; una evidencia común en todas las clases aporta poca información.
+
+### Ejemplo dentro del proyecto
+
+Sin evidencia específica, el modelo estima $P(I=Alto)=$ `r scales::percent(escenarios$prob_influencia_alta[escenarios$escenario == "Base"], accuracy = .1)`. Al observar simultáneamente **alcance alto, engagement alto y centralidad alta**, estima $P(I=Alto\mid E)=$ `r scales::percent(escenarios$prob_influencia_alta[escenarios$escenario == "Alcance, engagement y centralidad altos"], accuracy = .1)`.
+
+Es más claro comparar *odds* o momios. Si $p$ es una probabilidad, sus momios son $p/(1-p)$. La razón entre momios posteriores y previos es el **factor de Bayes** aportado por la evidencia:
+
+$$BF_E=\frac{P(E\mid I=Alto)}{P(E\mid I\neq Alto)}=
+\frac{\text{odds posteriores}}{\text{odds previos}}.$$
+
+Para este escenario, la evidencia multiplica los momios aproximadamente por `r round((escenarios$prob_influencia_alta[2] / (1 - escenarios$prob_influencia_alta[2])) / (escenarios$prob_influencia_alta[1] / (1 - escenarios$prob_influencia_alta[1])), 1)`. Es una actualización probabilística del modelo, no la afirmación causal de que forzar esos tres indicadores producirá influencia.
+
+## Qué añade una red bayesiana
+
+Aplicar Bayes a una sola evidencia es sencillo. El problema aparece al combinar muchas variables dependientes: antigüedad, frecuencia, calidad, alcance, centralidad, reciprocidad y engagement. Multiplicar probabilidades como si todas fueran independientes contaría información repetida y produciría resultados excesivamente seguros.
+
+Una **red bayesiana** resuelve este problema representando la distribución conjunta mediante:
+
+1. un **grafo dirigido acíclico** o DAG;
+2. una **tabla de probabilidad condicional** para cada nodo dado sus padres.
+
+“Dirigido” significa que cada arco tiene orientación; “acíclico” significa que no es posible salir de un nodo y regresar a él siguiendo las flechas. Esta restricción permite ordenar los nodos y factorizar la distribución:
+
+$$P(X_1,\ldots,X_n)=\prod_{i=1}^{n}P(X_i\mid Pa(X_i)),$$
+
+donde $Pa(X_i)$ es el conjunto de padres de $X_i$. Si el modelo contiene `calidad_contenido -> alcance -> potencial_influencia`, una parte de la factorización sería:
+
+$$P(C,A,I)=P(C)P(A\mid C)P(I\mid A).$$
+
+En lugar de estimar una tabla gigantesca para todas las combinaciones, se estiman tablas locales más pequeñas. Ésta es una de las ventajas centrales de las redes bayesianas: **representación compacta de una distribución multivariable**.
+
+## Independencia condicional
+
+La ausencia de un arco también comunica información. La propiedad local de Markov afirma que cada nodo es independiente de sus no descendientes una vez conocidos sus padres. En el ejemplo anterior:
+
+$$I\perp C\mid A$$
+
+se lee: influencia y calidad de contenido son condicionalmente independientes dado el alcance, siempre que ésa sea realmente la estructura del grafo. Saber la calidad ya no añadiría información directa sobre influencia después de conocer el alcance; su señal habría sido transmitida a través de éste.
+
+En grafos mayores se usa el criterio de **d-separación** para determinar si un conjunto de variables bloquea todos los caminos informativos entre otros dos conjuntos. Tres estructuras elementales ayudan a entenderlo:
+
+- **Cadena:** $A\rightarrow B\rightarrow C$. Conocer $B$ bloquea la asociación entre $A$ y $C$.
+- **Causa común:** $A\leftarrow B\rightarrow C$. Condicionar en $B$ separa $A$ de $C$.
+- **Colisionador:** $A\rightarrow B\leftarrow C$. $A$ y $C$ pueden ser independientes inicialmente, pero condicionar en $B$ puede volverlos dependientes.
+
+Estas propiedades evitan sumar dos veces señales relacionadas. Alcance e impresiones, por ejemplo, no deberían tratarse automáticamente como pruebas independientes si comparten causas.
+
+## Aprendizaje e inferencia son tareas distintas
+
+Una red bayesiana posee dos componentes que se estiman por separado:
+
+- **Aprendizaje de estructura:** decide qué arcos forman el DAG.
+- **Aprendizaje de parámetros:** estima las probabilidades de cada tabla condicional una vez fijada la estructura.
+
+Después se realiza la **inferencia**, que no vuelve a entrenar el modelo: propaga evidencia por la red para calcular una probabilidad posterior. En este proyecto `cpquery()` utiliza muestreo ponderado por verosimilitud para responder consultas de escenario.
+
+## Variables utilizadas por la red
+
+La unidad de modelado es un perfil. Los cuatro CSV se agregan hasta obtener una fila por usuario y luego se construyen once variables discretas:
+
+```{r variables-bn, echo=FALSE}
+tribble(
+  ~variable, ~origen, ~estados, ~papel,
+  "antiguedad", "fecha_registro", "Bajo / Medio / Alto", "Evidencia de madurez",
+  "frecuencia", "Cantidad de publicaciones", "Bajo / Medio / Alto", "Evidencia de producción",
+  "calidad_contenido", "Promedio de calidad simulada", "Bajo / Medio / Alto", "Evidencia de contenido",
+  "tasa_engagement", "Interacciones / impresiones", "Bajo / Medio / Alto", "Evidencia de respuesta",
+  "alcance", "Suma de impresiones", "Bajo / Medio / Alto", "Evidencia de exposición",
+  "centralidad", "Seguidores / máximo", "Bajo / Medio / Alto", "Evidencia estructural",
+  "reciprocidad", "Vínculos mutuos / seguidos", "Bajo / Medio / Alto", "Evidencia relacional",
+  "actividad_seguidor", "Interacciones emitidas", "Bajo / Medio / Alto", "Evidencia de participación",
+  "verificado", "usuarios.csv", "No / Sí", "Evidencia de perfil",
+  "potencial_influencia", "Tercil del score de influencia", "Bajo / Medio / Alto", "Objetivo",
+  "calidad_seguidor", "Tercil del score de seguidor", "Bajo / Medio / Alto", "Objetivo"
+) %>% knitr::kable(align = c("l", "l", "l", "l"))
+```
+
+La discretización por terciles mejora la legibilidad y permite usar una red completamente discreta. También pierde información: dos valores cercanos pueden quedar a lados distintos de un corte y dos valores alejados pueden compartir estado. Una versión futura podría comparar redes gaussianas, híbridas o diferentes criterios de discretización.
+
+## Cómo se aprende el modelo
+
+1. Se agregan los eventos de los cuatro CSV a nivel de perfil.
+2. Las métricas continuas se discretizan en Bajo/Medio/Alto.
+3. Se reserva aleatoriamente 20% de perfiles para evaluación; el 80% restante aprende la primera red.
+4. `bnlearn::hc()` aplica **hill climbing**: parte de una estructura, agrega, elimina o invierte arcos y conserva cambios que mejoran la puntuación sin crear ciclos.
+5. La puntuación **BDe** equilibra ajuste y complejidad desde una perspectiva bayesiana. El tamaño de muestra imaginario `iss = 10` actúa como información previa distribuida entre las configuraciones.
+6. Una lista negra impide que los dos objetivos apunten hacia atributos previos. Así, “influencia alta” no puede aparecer como causa de la antigüedad o del contenido dentro del modelo.
+7. `bn.fit(..., method = "bayes")` estima las tablas condicionales con un prior Dirichlet. El suavizado evita asignar probabilidad cero sólo porque una combinación no apareció en una muestra finita.
+8. Se predicen las clases del 20% reservado. Después de evaluar, se reajusta una red con los `r nrow(perfiles)` perfiles para generar probabilidades y rankings finales.
+
+## Por qué es apropiada para este problema
+
+| Necesidad del caso | Aporte de la red bayesiana |
+|---|---|
+| Combinar red, contenido, alcance y actividad | Modela su distribución conjunta sin exigir independencia total |
+| Evitar que señales correlacionadas se cuenten repetidamente | Explicita dependencias e independencias condicionales |
+| Trabajar con incertidumbre | Devuelve probabilidades por clase, no sólo una etiqueta rígida |
+| Explicar un resultado | El DAG y las tablas condicionales permiten rastrear qué evidencia interviene |
+| Analizar escenarios | Calcula $P(Objetivo\mid Evidencia)$ para combinaciones observadas o hipotéticas |
+| Incorporar conocimiento experto | Permite arcos obligatorios o prohibidos mediante listas blancas y negras |
+| Actualizar el análisis | Puede reajustarse cuando ingresan nuevos perfiles o comportamientos |
+
+Un clasificador tradicional también podría ordenar perfiles. La ventaja particular aquí no es afirmar que la red bayesiana siempre predice mejor, sino que ofrece una representación coherente de dependencias y una interfaz natural para **consultar incertidumbre**.
+
+## Qué resultado útil produce
+
+Para cada perfil se obtiene una distribución como:
+
+$$P(I=Bajo\mid E),\quad P(I=Medio\mid E),\quad P(I=Alto\mid E),$$
+
+cuyos valores suman uno. El ranking utiliza $P(I=Alto\mid E)$, mientras que el segundo ranking utiliza $P(Seguidor=Alto\mid E)$. Esto permite:
+
+- ordenar candidatos y establecer umbrales según la capacidad operativa;
+- distinguir un caso seguro de uno ambiguo aunque ambos reciban la misma clase;
+- consultar qué ocurre bajo una combinación de evidencias;
+- descubrir dependencias que merecen revisión de negocio;
+- conservar trazabilidad entre datos, variables, estructura y decisión.
+
+Existe una limitación fundamental: en este MVP las etiquetas objetivo se derivan de *scores* que usan varias de las mismas métricas entregadas al modelo. Por eso la exactitud evalúa qué tan bien la red reconstruye una **definición sintética de negocio**, no si predice el éxito real de una campaña. En una implantación real, el objetivo debería ser externo y posterior —conversiones, ventas incrementales, retención o calidad auditada de audiencia— y la validación debería ser temporal.
+
+**Importante:** un arco aprendido de observaciones expresa dependencia probabilística dentro del modelo; por sí solo no prueba causalidad. Distintos DAG pueden codificar las mismas independencias, la orientación depende también de restricciones y cualquier variable omitida puede explicar asociaciones aparentes.
+
+## Red aprendida
+
+```{r red-bayesiana, echo=FALSE}
+nombres <- unique(c(arcos$origen, arcos$destino))
+nodos <- data.frame(
+  id = nombres,
+  label = gsub("_", "\n", nombres),
+  group = ifelse(nombres %in% c("potencial_influencia", "calidad_seguidor"), "Objetivo", "Evidencia"),
+  title = nombres
+)
+enlaces <- data.frame(from = arcos$origen, to = arcos$destino,
+                      title = paste("p-valor asociación:", signif(arcos$p_value, 3)),
+                      arrows = "to")
+visNetwork(nodos, enlaces, height = "520px") %>%
+  visGroups(groupname = "Objetivo", color = "#E74C3C") %>%
+  visGroups(groupname = "Evidencia", color = "#3498DB") %>%
+  visHierarchicalLayout(direction = "LR", sortMethod = "directed") %>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)
+```
+
+### Cómo leer la red obtenida
+
+Las dependencias que llegan directamente a cada objetivo son su evidencia local inmediata en el DAG aprendido:
+
+```{r padres-objetivos, echo=FALSE}
+arcos %>%
+  filter(destino %in% c("potencial_influencia", "calidad_seguidor")) %>%
+  transmute(
+    objetivo = gsub("_", " ", destino),
+    evidencia_directa = gsub("_", " ", origen),
+    `p-valor de asociación` = format.pval(p_value, digits = 3, eps = 1e-99)
+  ) %>%
+  arrange(objetivo, `p-valor de asociación`) %>%
+  knitr::kable(align = c("l", "l", "r"))
+```
+
+Un padre directo no es necesariamente la única variable relevante. Otra señal puede actuar de forma indirecta a través de uno o varios nodos. Por ejemplo, si `frecuencia -> alcance -> potencial_influencia`, la frecuencia todavía modifica la distribución del objetivo, pero su información se propaga mediante alcance.
+
+Los valores mostrados en las conexiones y en la tabla provienen de una prueba $χ^2$ de asociación condicional usada como diagnóstico de fuerza. Un valor pequeño indica incompatibilidad con independencia bajo la estructura, pero **no** es la probabilidad de que el arco sea verdadero, no mide el tamaño del efecto y no reemplaza una validación por remuestreo.
+
+La dirección de una flecha tampoco implica automáticamente causa y efecto. Dentro de este proyecto sirve principalmente para factorizar la probabilidad y propagar evidencia de manera coherente con las restricciones incorporadas.
+
+# Evaluación
+
+```{r metricas-tabla, echo=FALSE}
+metricas %>%
+  mutate(exactitud = scales::percent(exactitud, accuracy = .1)) %>%
+  datatable(rownames = FALSE, options = list(dom = "t", pageLength = 5))
+```
+
+La partición es aleatoria porque cada fila representa un perfil en una fotografía de la red. En producción conviene una partición temporal: entrenar con un período y evaluar en el siguiente. La exactitud tampoco evalúa calibración, estabilidad por subgrupo o valor económico; ésas son extensiones necesarias antes de desplegar decisiones reales.
+
+## Inferencia por escenarios
+
+```{r escenarios-grafico, echo=FALSE}
+ggplot(escenarios, aes(reorder(escenario, prob_influencia_alta), prob_influencia_alta)) +
+  geom_col(fill = "#2C7FB8", width = .7) +
+  geom_text(aes(label = scales::percent(prob_influencia_alta, accuracy = .1)),
+            hjust = -.1, size = 3.7) +
+  coord_flip(clip = "off") +
+  scale_y_continuous(labels = scales::percent, limits = c(0, min(1, max(escenarios$prob_influencia_alta) * 1.18))) +
+  labs(x = NULL, y = "P(influencia alta | evidencia)",
+       title = "La evidencia actualiza la probabilidad") +
+  theme_minimal() + theme(plot.margin = margin(5.5, 35, 5.5, 5.5))
+```
+
+Estos escenarios son consultas probabilísticas al modelo. No equivalen a intervenciones: aumentar artificialmente una métrica no garantiza el cambio mostrado.
+
+# Hallazgos y decisiones
+
+```{r top, echo=FALSE}
+ranking %>%
+  slice_head(n = 10) %>%
+  transmute(Posición = posicion, Usuario = paste0("@", usuario), País = pais,
+            Nicho = nicho, Seguidores = seguidores,
+            `Engagement (%)` = round(tasa_engagement, 2),
+            `P(influencia alta)` = scales::percent(prob_influencia_alta, accuracy = .1)) %>%
+  datatable(rownames = FALSE, options = list(pageLength = 10, dom = "tip"))
+```
+
+El ranking sirve para formar una lista corta. La decisión de campaña debería complementar la probabilidad con adecuación temática, seguridad de marca, autenticidad de audiencia, costo y revisión cualitativa del contenido.
+
+# Dashboards y operación
+
+- [Explorar los datos iniciales](dashboard_datos.html)
+- [Explorar resultados y rankings](dashboard_resultados.html)
+
+El pipeline completo se ejecuta con `Rscript run_all.R`. Una futura automatización puede programar esa orden, validar cambios de distribución, versionar el modelo y publicar `docs/` en GitHub Pages, Netlify o Vercel.
+
+# Limitaciones y siguientes pasos
+
+1. Los datos son sintéticos y no permiten conclusiones sobre una plataforma real.
+2. La calidad de contenido es simulada; en producción requeriría una rúbrica humana o un modelo validado.
+3. La centralidad usada es deliberadamente simple. Se pueden añadir PageRank, intermediación y detección de comunidades.
+4. El score objetivo es una definición de negocio; debe acordarse y validarse con resultados de campañas.
+5. Se recomienda evaluar calibración, matriz de confusión, estabilidad temporal y paridad entre nichos/países.
+6. Para aproximarse a causalidad serían necesarios supuestos más fuertes, conocimiento experto o experimentos.
+
+# Reproducibilidad
+
+```{r reproducibilidad}
+cat("Semilla: 20260917\n")
+cat("R:", R.version.string, "\n")
+cat("bnlearn:", as.character(packageVersion("bnlearn")), "\n")
+cat("charlatan:", as.character(packageVersion("charlatan")), "\n")
+```
