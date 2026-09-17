@@ -571,6 +571,66 @@ donde cada $R$ es el rango percentil de la variable, expresado entre 0 y 1, y $V
 
 Los pesos son una **decisión de diseño del caso académico**, no valores universales descubiertos por el modelo. En una aplicación real deberían acordarse con especialistas, justificarse mediante objetivos de campaña y someterse a análisis de sensibilidad.
 
+### Dos ejemplos de cálculo
+
+Los rangos percentiles se calculan comparando cada perfil con las otras `r nrow(perfiles) - 1` cuentas. Por ejemplo, $R_{seguidores}=0.80$ significa que el perfil se encuentra aproximadamente por encima del 80% de la base en esa variable; no significa que 80% de sus seguidores sean válidos.
+
+El primer ejemplo utiliza un perfil cercano al percentil 20 del score. El segundo selecciona expresamente la cuenta con **mayor número de seguidores** de toda la base, para comprobar cómo esa ventaja se combina con impresiones, engagement, calidad y verificación.
+
+```{r ejemplos-calculo-score, echo=FALSE, results='asis'}
+componentes_score <- perfiles %>%
+  mutate(
+    R_seguidores = percent_rank(log1p(seguidores)),
+    R_impresiones = percent_rank(log1p(impresiones)),
+    R_engagement = percent_rank(tasa_engagement),
+    R_calidad = percent_rank(calidad_media),
+    V = as.integer(verificado),
+    score_recalculado = 100 * (
+      .28 * R_seguidores + .24 * R_impresiones +
+      .22 * R_engagement + .16 * R_calidad + .10 * V
+    )
+  )
+
+score_percentil_20 <- quantile(componentes_score$score_influencia,
+                               probs = .20, type = 8)
+indices_ejemplo <- c(
+  which.min(abs(componentes_score$score_influencia - score_percentil_20)),
+  which.max(componentes_score$seguidores)
+)
+ejemplos_score <- componentes_score[indices_ejemplo, ]
+
+for (i in seq_len(nrow(ejemplos_score))) {
+  e <- ejemplos_score[i, ]
+  detalle_titulo <- if (i == 2) {
+    paste0(" — cuenta top en seguidores (", e$seguidores, ")")
+  } else {
+    ""
+  }
+  cat(sprintf("#### Ejemplo %d: @%s — potencial %s%s\n\n",
+              i, e$usuario, e$clase_influencia, detalle_titulo))
+  cat(sprintf(
+    "El perfil tiene **%s seguidores**, **%s impresiones**, **%.2f%% de engagement**, una calidad media de **%.3f** y verificación **%s**. Al compararlo con toda la base, sus rangos son: seguidores %.3f, impresiones %.3f, engagement %.3f y calidad %.3f.\n\n",
+    scales::comma(e$seguidores), scales::comma(e$impresiones),
+    e$tasa_engagement, e$calidad_media,
+    ifelse(e$V == 1, "sí", "no"), e$R_seguidores,
+    e$R_impresiones, e$R_engagement, e$R_calidad
+  ))
+  cat(sprintf(
+    "$$Score=100[0.28(%.3f)+0.24(%.3f)+0.22(%.3f)+0.16(%.3f)+0.10(%d)]=%.1f$$\n\n",
+    e$R_seguidores, e$R_impresiones, e$R_engagement,
+    e$R_calidad, e$V, e$score_recalculado
+  ))
+  cat(sprintf(
+    "Los aportes al resultado son **%.1f puntos** por seguidores, **%.1f** por impresiones, **%.1f** por engagement, **%.1f** por calidad y **%.1f** por verificación. La suma es **%.1f puntos**.\n\n",
+    28 * e$R_seguidores, 24 * e$R_impresiones,
+    22 * e$R_engagement, 16 * e$R_calidad, 10 * e$V,
+    e$score_recalculado
+  ))
+}
+```
+
+Los ejemplos muestran que el score es aditivo: una cuenta puede compensar un alcance moderado con mejor engagement o calidad. La verificación aporta diez puntos completos cuando $V=1$, por lo que su peso debe revisarse cuidadosamente en una aplicación real.
+
 Después, el score se divide por terciles observados:
 
 - **Potencial Bajo:** score menor o igual a `r round(unname(quantile(perfiles$score_influencia, 1/3, type = 8)), 1)`.
@@ -604,43 +664,49 @@ ggplotly(p, tooltip = "text")
 
 ## De la probabilidad condicional al teorema de Bayes
 
-Una probabilidad simple, como $P(I)$, puede expresar la proporción de perfiles con influencia alta. Una **probabilidad condicional**, $P(I\mid E)$, responde una pregunta distinta: ¿cuál es la probabilidad de influencia alta *sabiendo* que observamos cierta evidencia $E$?
+En esta sección, **influencia** nombra el fenómeno general que interesa estudiar, mientras que **potencial de influencia** es la variable operativa construida anteriormente. Para evitar confundirlos, se define:
+
+$$Z=\text{Potencial de influencia}\in\{Bajo,Medio,Alto\}$$
+
+y $H=\{Z=Alto\}$ es el evento “el perfil pertenece a la clase Potencial Alto”. Por tanto, el modelo no calcula una influencia real y absoluta; calcula probabilidades sobre las tres clases de potencial definidas por el score.
+
+Una probabilidad simple, $P(H)$, expresa la proporción esperada de perfiles con potencial alto. Una **probabilidad condicional**, $P(H\mid E)$, responde una pregunta distinta: ¿cuál es la probabilidad de potencial alto *sabiendo* que observamos cierta evidencia $E$?
 
 Por definición:
 
-$$P(I\mid E)=\frac{P(I\cap E)}{P(E)}$$
+$$P(H\mid E)=\frac{P(H\cap E)}{P(E)}$$
 
 Como la intersección puede escribirse en ambos sentidos,
 
-$$P(I\cap E)=P(E\mid I)P(I)=P(I\mid E)P(E),$$
+$$P(H\cap E)=P(E\mid H)P(H)=P(H\mid E)P(E),$$
 
 se obtiene el **teorema de Bayes**:
 
-$$P(I\mid E)=\frac{P(E\mid I)P(I)}{P(E)}.$$
+$$P(H\mid E)=\frac{P(E\mid H)P(H)}{P(E)}.$$
 
 Cada término tiene una lectura concreta en este proyecto:
 
-- $P(I)$ es el **prior** o probabilidad inicial de que un perfil tenga influencia alta antes de incorporar la evidencia.
-- $P(E\mid I)$ es la **verosimilitud**: qué tan compatible es observar, por ejemplo, alcance y engagement altos entre perfiles de influencia alta.
+- $P(H)$ es el **prior** o probabilidad inicial de que un perfil pertenezca a Potencial Alto antes de incorporar la evidencia.
+- $P(E\mid H)$ es la **verosimilitud**: qué tan compatible es observar, por ejemplo, alcance y engagement altos entre perfiles clasificados con Potencial Alto.
 - $P(E)$ es la **evidencia marginal** o constante de normalización; considera cuán frecuente es esa combinación en toda la población.
-- $P(I\mid E)$ es el **posterior**: la creencia actualizada después de observar los indicadores del perfil.
+- $P(H\mid E)$ es el **posterior**: la probabilidad actualizada de Potencial Alto después de observar los indicadores del perfil.
 
-Para hipótesis mutuamente excluyentes —influencia baja, media o alta— la evidencia se calcula con la ley de probabilidad total:
+Para las clases mutuamente excluyentes —Potencial Bajo, Medio o Alto— la evidencia se calcula con la ley de probabilidad total:
 
-$$P(E)=\sum_{k\in\{Bajo,Medio,Alto\}}P(E\mid I=k)P(I=k).$$
+$$P(E)=\sum_{k\in\{Bajo,Medio,Alto\}}P(E\mid Z=k)P(Z=k).$$
 
 Esto garantiza que las probabilidades posteriores de las tres clases sumen uno. Una evidencia favorable a la clase Alta aumenta su probabilidad; una evidencia común en todas las clases aporta poca información.
 
 ### Ejemplo dentro del proyecto
 
-Sin evidencia específica, el modelo estima $P(I=Alto)=$ `r scales::percent(escenarios$prob_influencia_alta[escenarios$escenario == "Base"], accuracy = .1)`. Al observar simultáneamente **alcance alto, engagement alto y centralidad alta**, estima $P(I=Alto\mid E)=$ `r scales::percent(escenarios$prob_influencia_alta[escenarios$escenario == "Alcance, engagement y centralidad altos"], accuracy = .1)`.
+Sin evidencia específica, el modelo estima $P(H)=$ `r scales::percent(escenarios$prob_influencia_alta[escenarios$escenario == "Base"], accuracy = .1)`. Al observar simultáneamente **alcance alto, engagement alto y centralidad alta**, estima $P(H\mid E)=$ `r scales::percent(escenarios$prob_influencia_alta[escenarios$escenario == "Alcance, engagement y centralidad altos"], accuracy = .1)`.
 
 Es más claro comparar *odds* o momios. Si $p$ es una probabilidad, sus momios son $p/(1-p)$. La razón entre momios posteriores y previos es el **factor de Bayes** aportado por la evidencia:
 
-$$BF_E=\frac{P(E\mid I=Alto)}{P(E\mid I\neq Alto)}=
+$$BF_E=\frac{P(E\mid H)}{P(E\mid \neg H)}=
 \frac{\text{odds posteriores}}{\text{odds previos}}.$$
 
-Para este escenario, la evidencia multiplica los momios aproximadamente por `r round((escenarios$prob_influencia_alta[2] / (1 - escenarios$prob_influencia_alta[2])) / (escenarios$prob_influencia_alta[1] / (1 - escenarios$prob_influencia_alta[1])), 1)`. Es una actualización probabilística del modelo, no la afirmación causal de que forzar esos tres indicadores producirá influencia.
+Para este escenario, la evidencia multiplica los momios aproximadamente por `r round((escenarios$prob_influencia_alta[2] / (1 - escenarios$prob_influencia_alta[2])) / (escenarios$prob_influencia_alta[1] / (1 - escenarios$prob_influencia_alta[1])), 1)`. Es una actualización probabilística de la clase Potencial Alto, no la afirmación causal de que forzar esos tres indicadores producirá influencia real.
 
 ## Qué añade una red bayesiana
 
@@ -657,7 +723,7 @@ $$P(X_1,\ldots,X_n)=\prod_{i=1}^{n}P(X_i\mid Pa(X_i)),$$
 
 donde $Pa(X_i)$ es el conjunto de padres de $X_i$. Si el modelo contiene `calidad_contenido -> alcance -> potencial_influencia`, una parte de la factorización sería:
 
-$$P(C,A,I)=P(C)P(A\mid C)P(I\mid A).$$
+$$P(C,A,Z)=P(C)P(A\mid C)P(Z\mid A).$$
 
 En lugar de estimar una tabla gigantesca para todas las combinaciones, se estiman tablas locales más pequeñas. Ésta es una de las ventajas centrales de las redes bayesianas: **representación compacta de una distribución multivariable**.
 
@@ -665,9 +731,9 @@ En lugar de estimar una tabla gigantesca para todas las combinaciones, se estima
 
 La ausencia de un arco también comunica información. La propiedad local de Markov afirma que cada nodo es independiente de sus no descendientes una vez conocidos sus padres. En el ejemplo anterior:
 
-$$I\perp C\mid A$$
+$$Z\perp C\mid A$$
 
-se lee: influencia y calidad de contenido son condicionalmente independientes dado el alcance, siempre que ésa sea realmente la estructura del grafo. Saber la calidad ya no añadiría información directa sobre influencia después de conocer el alcance; su señal habría sido transmitida a través de éste.
+se lee: potencial de influencia y calidad de contenido son condicionalmente independientes dado el alcance, siempre que ésa sea realmente la estructura del grafo. Saber la calidad ya no añadiría información directa sobre el potencial después de conocer el alcance; su señal habría sido transmitida a través de éste.
 
 En grafos mayores se usa el criterio de **d-separación** para determinar si un conjunto de variables bloquea todos los caminos informativos entre otros dos conjuntos. Tres estructuras elementales ayudan a entenderlo:
 
@@ -716,7 +782,7 @@ La discretización por terciles mejora la legibilidad y permite usar una red com
 3. Se reserva aleatoriamente 20% de perfiles para evaluación; el 80% restante aprende la primera red.
 4. `bnlearn::hc()` aplica **hill climbing**: parte de una estructura, agrega, elimina o invierte arcos y conserva cambios que mejoran la puntuación sin crear ciclos.
 5. La puntuación **BDe** equilibra ajuste y complejidad desde una perspectiva bayesiana. El tamaño de muestra imaginario `iss = 10` actúa como información previa distribuida entre las configuraciones.
-6. Una lista negra impide que los dos objetivos apunten hacia atributos previos. Así, “influencia alta” no puede aparecer como causa de la antigüedad o del contenido dentro del modelo.
+6. Una lista negra impide que los dos objetivos apunten hacia atributos previos. Así, “Potencial Alto” no puede aparecer como causa de la antigüedad o del contenido dentro del modelo.
 7. `bn.fit(..., method = "bayes")` estima las tablas condicionales con un prior Dirichlet. El suavizado evita asignar probabilidad cero sólo porque una combinación no apareció en una muestra finita.
 8. Se predicen las clases del 20% reservado. Después de evaluar, se reajusta una red con los `r nrow(perfiles)` perfiles para generar probabilidades y rankings finales.
 
@@ -738,9 +804,9 @@ Un clasificador tradicional también podría ordenar perfiles. La ventaja partic
 
 Para cada perfil se obtiene una distribución como:
 
-$$P(I=Bajo\mid E),\quad P(I=Medio\mid E),\quad P(I=Alto\mid E),$$
+$$P(Z=Bajo\mid E),\quad P(Z=Medio\mid E),\quad P(Z=Alto\mid E),$$
 
-cuyos valores suman uno. El ranking utiliza $P(I=Alto\mid E)$, mientras que el segundo ranking utiliza $P(Seguidor=Alto\mid E)$. Esto permite:
+cuyos valores suman uno. El ranking utiliza $P(Z=Alto\mid E)$, es decir, la probabilidad de **Potencial Alto**, mientras que el segundo ranking utiliza $P(Seguidor=Alto\mid E)$. Esto permite:
 
 - ordenar candidatos y establecer umbrales según la capacidad operativa;
 - distinguir un caso seguro de uno ambiguo aunque ambos reciban la misma clase;
@@ -813,7 +879,7 @@ ggplot(escenarios, aes(reorder(escenario, prob_influencia_alta), prob_influencia
             hjust = -.1, size = 3.7) +
   coord_flip(clip = "off") +
   scale_y_continuous(labels = scales::percent, limits = c(0, min(1, max(escenarios$prob_influencia_alta) * 1.18))) +
-  labs(x = NULL, y = "P(influencia alta | evidencia)",
+  labs(x = NULL, y = "P(Potencial Alto | evidencia)",
        title = "La evidencia actualiza la probabilidad") +
   theme_minimal() + theme(plot.margin = margin(5.5, 35, 5.5, 5.5))
 ```
@@ -828,7 +894,7 @@ ranking %>%
   transmute(Posición = posicion, Usuario = paste0("@", usuario), País = pais,
             Nicho = nicho, Seguidores = seguidores,
             `Engagement (%)` = round(tasa_engagement, 2),
-            `P(influencia alta)` = scales::percent(prob_influencia_alta, accuracy = .1)) %>%
+            `P(Potencial Alto)` = scales::percent(prob_influencia_alta, accuracy = .1)) %>%
   datatable(rownames = FALSE, options = list(pageLength = 10, dom = "tip"))
 ```
 
